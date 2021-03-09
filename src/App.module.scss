@@ -1,0 +1,29 @@
+.header {
+  align-items: center;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 26px;
+  padding: 15px 22px;
+}
+
+.app-name {
+  font-size: 18px;
+}
+
+.auth {
+  display: flex;
+  gap: 20px;
+}
+
+.auth__buttons {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 7px 17px;
+}
+
+.auth__sign-up {
+  color: #52c41a;
+  border: 1px solid #52c41a;
+  border-radius: 5px;
+}

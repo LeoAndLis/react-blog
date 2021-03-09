@@ -1,7 +1,12 @@
+@import "fonts/fonts.scss";
+
 html,
 body {
-  width: 100%;
+  background: #ebeef3;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
   height: 100%;
+  width: 100%;
 }
 
 html {
@@ -12,4 +17,11 @@ html {
 *:before,
 *:after {
   box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  background: none;
+  border: none;
 }
