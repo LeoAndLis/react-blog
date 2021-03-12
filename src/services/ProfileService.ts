@@ -11,6 +11,7 @@ export default class ProfileService {
   apiRequest = new ServerRequestService();
 
   protected readonly API_GET_PROFILE_PATH = '/profiles/{username}';
+  
   protected readonly API_FOLLOW_PROFILE_PATH = '/profiles/{username}/follow';
 
   public getProfile(username: string): Promise<ProfileType> {

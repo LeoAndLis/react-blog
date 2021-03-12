@@ -19,7 +19,9 @@ export default class AuthService {
   apiRequest = new ServerRequestService();
 
   protected readonly API_AUTHENTIFICATION_PATH = '/users/login';
+
   protected readonly API_REGISTRATION_PATH = '/users';
+  
   protected readonly API_USER_PATH = '/user';
 
   public authentification(postParams: AuthParamsType): Promise<UserType> {

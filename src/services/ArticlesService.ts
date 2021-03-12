@@ -30,17 +30,21 @@ type ArticleParamsType = {
 export default class ArticlesService {
   apiRequest = new ServerRequestService();
 
-  protected readonly API_ARTICLE_PATH = '/article/{slug}';
-  protected readonly API_ARTICLE_FAVORITE_PATH = '/articles/{slug}/favorite';
-  protected readonly API_ARTICLES_FEED_PATH = '/articles/feed';
-  protected readonly API_ARTICLES_LIST_PATH = '/articles';
-  protected readonly API_UPDATE_ARTICLE_PATH = '/articles/{slug}';
+  protected readonly API_ARTICLE_PATH = '/articles/{slug}';
 
+  protected readonly API_ARTICLE_FAVORITE_PATH = '/articles/{slug}/favorite';
+
+  protected readonly API_ARTICLES_FEED_PATH = '/articles/feed';
+  
+  protected readonly API_ARTICLES_LIST_PATH = '/articles';
+
+  protected readonly API_UPDATE_ARTICLE_PATH = '/articles/{slug}';
+  
   public addArticle(postParams: ArticleParamsType): Promise<ArticleType> {
     return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, {}, 'POST', postParams);
   }
 
-  public getArticle(articleSlug: string): Promise<ArticleType> {
+  public getArticle(articleSlug: string): Promise<{ article: ArticleType }> {
     const path = this.API_ARTICLE_PATH.replace('{slug}', articleSlug);
     return this.apiRequest.getResource(path);
   }

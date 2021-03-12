@@ -9,7 +9,9 @@ type CommentType = {
 };
 
 export default class CommentsService extends ArticlesService {
+  
     protected readonly API_ADD_COMMENT_PATH = '/articles/{slug}/comments';
+
     protected readonly API_DELETE_COMMENT_PATH = '/article/{slug}/comments/{id}';
 
   public addComment(articleSlug: string, body: string): Promise<CommentType> {
