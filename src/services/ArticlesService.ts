@@ -1,24 +1,5 @@
 import ServerRequestService from './ServerRequestService';
-
-export type AuthorType = {
-  username: string;
-  bio: string;
-  image: string;
-  following: boolean;
-};
-
-type ArticleType = {
-  slug: string;
-  title: string;
-  description: string;
-  body: string;
-  tagList: string[];
-  createdAt: string;
-  updatedAt: string;
-  favorited: boolean;
-  favoritesCount: number;
-  author: AuthorType;
-};
+import { ArticleType } from '../lib/types';
 
 type ArticleParamsType = {
   title: string;
@@ -49,8 +30,8 @@ export default class ArticlesService {
     return this.apiRequest.getResource(path);
   }
 
-  public getArticles(): Promise<ArticleType[]> {
-    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH);
+  public getArticles(offset: number): Promise<{ articles: ArticleType[], articlesCount: number }> {
+    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, { offset });
   }
 
   public getFeedArticles(): Promise<ArticleType[]> {

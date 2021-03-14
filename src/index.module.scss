@@ -17,6 +17,9 @@ html {
 *:before,
 *:after {
   box-sizing: inherit;
+}
+
+h1, h2, h3, p, button, ul, li {
   margin: 0;
   padding: 0;
 }

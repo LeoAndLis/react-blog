@@ -3,6 +3,18 @@
   border-radius: 5px;
   filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
   padding: 15px 19px 24px;
+  max-width: 941px;
+  margin: 0 auto;
+}
+
+.article-error {
+  max-width: 941px;
+  margin: 0 auto;
+}
+
+.article-loading {
+  display: block !important;
+  margin: 0 auto !important;
 }
 
 .article__header {
@@ -22,6 +34,7 @@
 }
 
 .article__favorite-button {
+  height: 16px;
   margin-left: 13px;
 }
 

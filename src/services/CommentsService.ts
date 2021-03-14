@@ -1,4 +1,5 @@
-import ArticlesService, { AuthorType } from './ArticlesService';
+import ArticlesService from './ArticlesService';
+import { AuthorType } from '../lib/types';
 
 type CommentType = {
   id: number;
@@ -10,13 +11,13 @@ type CommentType = {
 
 export default class CommentsService extends ArticlesService {
   
-    protected readonly API_ADD_COMMENT_PATH = '/articles/{slug}/comments';
+  protected readonly API_ADD_COMMENT_PATH = '/articles/{slug}/comments';
 
-    protected readonly API_DELETE_COMMENT_PATH = '/article/{slug}/comments/{id}';
+  protected readonly API_DELETE_COMMENT_PATH = '/article/{slug}/comments/{id}';
 
   public addComment(articleSlug: string, body: string): Promise<CommentType> {
     const path = this.API_ARTICLES_LIST_PATH.replace('{slug}', articleSlug);
-    return this.apiRequest.getResource(path, {}, 'POST', {body});
+    return this.apiRequest.getResource(path, {}, 'POST', { body });
   }
 
   public deleteComment(articleSlug: string, commentId: number): Promise<CommentType> {

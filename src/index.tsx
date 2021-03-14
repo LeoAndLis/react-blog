@@ -5,6 +5,7 @@ import store from './store/store';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import 'antd/dist/antd.css';
 import './index.module.scss';
 
 ReactDOM.render(

@@ -1,11 +1,5 @@
 import ServerRequestService from './ServerRequestService';
-
-type ProfileType = {
-  username: string;
-  bio: string;
-  image: string;
-  following: boolean;
-};
+import { ProfileType } from '../lib/types';
 
 export default class ProfileService {
   apiRequest = new ServerRequestService();
