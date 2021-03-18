@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import ArticlesList from './components/ArticlesList/ArticlesList';
 import Article from './components/Article/Article';
+import SignInComponent from './components/SignInComponent/SignInComponent';
+import SignUpComponent from './components/SignUpComponent/SignUpComponent';
 
 import classes from './App.module.scss';
 
@@ -11,12 +13,16 @@ function App() {
     <div className={classes.app}>
       <Router>
         <header className={classes.header}>
-          <div className={classes['app-name']}><Link to="/">Realworld blog</Link></div>
+          <div className={classes['app-name']}>
+            <Link to="/">Realworld blog</Link>
+          </div>
           <div className={classes.auth}>
-            <button className={classNames(classes['auth__sign-in'], classes.auth__buttons)} type="button">Sign In
-            </button>
-            <button className={classNames(classes['auth__sign-up'], classes.auth__buttons)} type="button">Sign Up
-            </button>
+            <Link to="/sign-in" className={classNames(classes['auth__sign-in'], classes.auth__links)}>
+              Sign In
+            </Link>
+            <Link to="/sign-up" className={classNames(classes['auth__sign-up'], classes.auth__links)}>
+              Sign Up
+            </Link>
           </div>
         </header>
         <main className="main">
@@ -30,6 +36,8 @@ function App() {
                 return <Article slug={slug} />;
               }}
             />
+            <Route path="/sign-up" exact component={SignUpComponent} />
+            <Route path="/sign-in" exact component={SignInComponent} />
           </section>
         </main>
       </Router>
