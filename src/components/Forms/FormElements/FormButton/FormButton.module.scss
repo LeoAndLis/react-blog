@@ -1,8 +1,16 @@
 .form__submit-button {
   background-color: #1890ff;
+  border: 2px solid #1890ff;
   border-radius: 4px;
   color: #fff;
   cursor: pointer;
+  font-size: 16px;
   height: 40px;
   width: 100%;
+  transition: background-color 1s, color 1s;
+
+  &:hover {
+    background-color: #fff;
+    color: #1890ff;
+  }
 }

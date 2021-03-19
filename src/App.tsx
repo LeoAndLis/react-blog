@@ -5,6 +5,7 @@ import ArticlesList from './components/ArticlesList/ArticlesList';
 import Article from './components/Article/Article';
 import SignInComponent from './components/SignInComponent/SignInComponent';
 import SignUpComponent from './components/SignUpComponent/SignUpComponent';
+import ProfileComponent from './components/ProfileComponent/ProfileComponent';
 
 import classes from './App.module.scss';
 
@@ -38,6 +39,7 @@ function App() {
             />
             <Route path="/sign-up" exact component={SignUpComponent} />
             <Route path="/sign-in" exact component={SignInComponent} />
+            <Route path="/profile" exact component={ProfileComponent} />
           </section>
         </main>
       </Router>
