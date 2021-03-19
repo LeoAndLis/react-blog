@@ -26,11 +26,12 @@ export type ProfileType = {
 };
 
 export type UserType = {
+  bio?: string;
   email: string;
-  token: string;
+  image?: string | null;
+  password: string;
+  token?: string;
   username: string;
-  bio: string;
-  image: null | string;
 };
 
 export type StateType = {
@@ -40,4 +41,5 @@ export type StateType = {
   articlesListLoading: boolean;
   curArticle: ArticleType;
   error: string;
+  user: UserType;
 };

@@ -5,9 +5,11 @@ import {
   SET_ARTICLES_LIST_LOADING,
   SET_ARTICLES_COUNT,
   SET_ERROR,
+  SET_USER,
 } from '../types/types';
 import ArticlesService from '../../services/ArticlesService';
-import { ArticleType } from '../../lib/types';
+import UserService from '../../services/UserService';
+import { ArticleType, UserType } from '../../lib/types';
 
 const setArticleAction = (payload: ArticleType) => ({ type: SET_ARTICLE, payload });
 const setArticlesListAction = (payload: ArticleType[]) => ({ type: SET_ARTICLES_LIST, payload });
@@ -15,8 +17,10 @@ const setArticleLoadingAction = (payload: boolean) => ({ type: SET_ARTICLE_LOADI
 const setArticlesListLoadingAction = (payload: boolean) => ({ type: SET_ARTICLES_LIST_LOADING, payload });
 const setArticlesCountAction = (payload: number) => ({ type: SET_ARTICLES_COUNT, payload });
 const setErrorAction = (payload: string) => ({ type: SET_ERROR, payload });
+const setUserAction = (payload: UserType) => ({ type: SET_USER, payload });
 
 const articlesService = new ArticlesService();
+const userService = new UserService();
 
 export const setArticle = (slug: string) => (dispatch: any) => {
   dispatch(setArticleLoadingAction(true));
@@ -40,4 +44,13 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
       dispatch(setArticlesListLoadingAction(false));
     })
     .catch(() => {setErrorAction(`There was an error receiving articles from page ${page}`);});
+};
+
+export const authenticateUser = (userData: UserType) => (dispatch: any) => {
+  dispatch(setErrorAction(''));
+  userService.authentication(userData)
+    .then((result) => {
+      dispatch(setUserAction(result));
+    })
+    .catch(() => {setErrorAction('There was an error while loggining in');});
 };

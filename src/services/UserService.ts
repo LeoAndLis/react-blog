@@ -1,13 +1,6 @@
 import ServerRequestService from './ServerRequestService';
 import { UserType } from '../lib/types';
 
-type AuthParamsType = {
-  email: string;
-  username?: string;
-  password: string;
-  image?: string;
-};
-
 export default class AuthService {
   apiRequest = new ServerRequestService();
 
@@ -17,11 +10,11 @@ export default class AuthService {
   
   protected readonly API_USER_PATH = '/user';
 
-  public authentication(postParams: AuthParamsType): Promise<UserType> {
+  public authentication(postParams: UserType): Promise<UserType> {
     return this.apiRequest.getResource(this.API_AUTHENTICATION_PATH, {}, 'POST', postParams);
   }
 
-  public registration(postParams: AuthParamsType): Promise<UserType> {
+  public registration(postParams: UserType): Promise<UserType> {
     return this.apiRequest.getResource(this.API_REGISTRATION_PATH, {}, 'POST', postParams);
   }
 
@@ -29,7 +22,7 @@ export default class AuthService {
     return this.apiRequest.getResource(this.API_USER_PATH);
   }
 
-  public udpateUser(postParams: AuthParamsType): Promise<UserType> {
+  public udpateUser(postParams: UserType): Promise<UserType> {
     return this.apiRequest.getResource(this.API_USER_PATH, {}, 'PUT', postParams);
   }
 }
