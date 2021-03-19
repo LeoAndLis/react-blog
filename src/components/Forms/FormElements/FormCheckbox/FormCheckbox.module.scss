@@ -22,6 +22,10 @@
   position: absolute;
   top: 3px;
   width: 16px;
+  
+  &-error {
+    color: #F5222D;
+  }
 }
 
 .form__input-checkbox:checked ~ .form__checkbox {

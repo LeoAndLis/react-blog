@@ -1,5 +1,14 @@
+
 .form__input {
   height: 40px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
+
+  &-error {
+    color: #F5222D;
+  }
+  
+  &--error {
+    border: 1px solid #F5222D;
+  }
 }

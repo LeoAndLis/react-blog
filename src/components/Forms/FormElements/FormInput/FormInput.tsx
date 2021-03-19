@@ -1,29 +1,37 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import classes from './FormInput.module.scss';
 
 type FormInputType = {
+  error?: '';
   label: string;
   name: string;
-  type?: string;
   placeholder?: string;
-  value?: string;
+  refParam?: any;
+  type?: string;
 };
 
-const FormInput = ({ label, name, type, placeholder, value }: FormInputType) => {
-  console.log('form input');
-  return (
-    <>
-      <label htmlFor={`id-${name}`}>{label}</label>
-      <input className={classes.form__input} id={`id-${name}`} name={name} type={type} placeholder={placeholder} value={value} />
-    </>
-  );
-};
+const FormInput = ({ error, label, name, placeholder, refParam, type }: FormInputType) => (
+  <>
+    <label htmlFor={`id-${name}`}>{label}</label>
+    <input
+      className={classNames(classes.form__input, { [classes['form__input--error']]: error })}
+      id={`id-${name}`}
+      name={name}
+      placeholder={placeholder}
+      ref={refParam}
+      type={type}
+    />
+    {error && <span className={classes['form__input-error']}>{error}</span>}
+  </>
+);
 
 FormInput.defaultProps = {
-  type: 'text',
+  error: '',
   placeholder: '',
-  value: '',
+  refParam: null,
+  type: 'text',
 };
 
 export default FormInput;
