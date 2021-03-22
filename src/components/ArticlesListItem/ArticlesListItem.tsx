@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import classNames from 'classnames';
 import { ArticleType } from '../../lib/types';
 
+import defaultImage from '../../assets/images/smiley-cyrus.jpg';
 import classes from '../Article/Article.module.scss';
 
 type ArticlesListItemPropsType = {
@@ -42,7 +43,7 @@ const ArticlesListItem = ({ article }: ArticlesListItemPropsType) => {
             className={classes['article__author-img']}
             width="46"
             height="46"
-            src={image}
+            src={image || defaultImage}
             alt={username}
           />
         </div>
