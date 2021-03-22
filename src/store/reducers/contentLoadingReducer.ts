@@ -1,4 +1,4 @@
-import { SET_ARTICLE_LOADING } from '../types/types';
+import { SET_CONTENT_LOADING } from '../types/types';
 
 type ReducerActionType = {
   type: string;
@@ -7,7 +7,7 @@ type ReducerActionType = {
 
 const articleLoadingReducer = (state: boolean = false, { type, payload }: ReducerActionType ) => {
   switch (type) {
-    case SET_ARTICLE_LOADING:
+    case SET_CONTENT_LOADING:
       return payload;
     default:
       return state;

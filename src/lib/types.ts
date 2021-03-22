@@ -35,10 +35,9 @@ export type UserType = {
 };
 
 export type StateType = {
-  articleLoading: boolean;
   articlesCount: number;
   articlesList: ArticleType[];
-  articlesListLoading: boolean;
+  contentLoading: boolean;
   curArticle: ArticleType;
   error: string;
   user: UserType;

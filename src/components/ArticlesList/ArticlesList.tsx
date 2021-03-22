@@ -10,12 +10,12 @@ import classes from './ArticlesList.module.scss';
 type ArticlesListPropsType = {
   articlesCount: number;
   articlesList: ArticleType[];
-  articlesListLoading: boolean;
+  contentLoading: boolean;
   errorMsg: string;
   setNewArticles: (page: number, pageSize: number | undefined) => {};
 };
 
-const ArticlesList = ({ articlesCount, articlesList, articlesListLoading, errorMsg, setNewArticles }: ArticlesListPropsType) => {
+const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, setNewArticles }: ArticlesListPropsType) => {
   useEffect(() => {
     setNewArticles(0, 20);
   },
@@ -26,8 +26,8 @@ const ArticlesList = ({ articlesCount, articlesList, articlesListLoading, errorM
       article={article} /></li>)}
   </ul>;
   const error = errorMsg.length ? <Alert className={classes['articles-error']} type="error" message="Error" description={errorMsg} /> : null;
-  const spinner = articlesListLoading ? <Spin size="large" className={classes['articles-loading']} /> : null;
-  const pagination = articlesCount ?
+  const spinner = contentLoading ? <Spin size="large" className={classes['articles-loading']} /> : null;
+  const pagination = articlesCount && !contentLoading ?
     <Pagination
       className={classes['articles-pagination']}
       size="small"
@@ -47,7 +47,7 @@ const ArticlesList = ({ articlesCount, articlesList, articlesListLoading, errorM
 const mapStateToProps = (state: StateType) => ({
   articlesCount: state.articlesCount,
   articlesList: state.articlesList,
-  articlesListLoading: state.articlesListLoading,
+  contentLoading: state.contentLoading,
   errorMsg: state.error,
 });
 

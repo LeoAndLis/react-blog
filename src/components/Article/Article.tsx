@@ -6,17 +6,18 @@ import { Alert, Spin } from 'antd';
 import { setArticle } from '../../store/actions/actions';
 import { ArticleType, StateType } from '../../lib/types';
 
+import defaultImage from '../../assets/images/smiley-cyrus.jpg';
 import classes from './Article.module.scss';
 
 type ArticleParamsType = {
-  articleLoading: boolean;
+  contentLoading: boolean;
   curArticle: ArticleType;
   getNewArticle: any;
   errorMsg: string;
   slug: string;
 };
 
-const Article = ({ articleLoading, curArticle, getNewArticle, errorMsg, slug }: ArticleParamsType) => {
+const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: ArticleParamsType) => {
   useEffect(() => {console.log('article create', slug);getNewArticle(slug);},
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
@@ -29,9 +30,10 @@ const Article = ({ articleLoading, curArticle, getNewArticle, errorMsg, slug }: 
   if ( errorMsg.length ) {
     return <Alert className={classes['article-error']} type="error" message="Error" description={errorMsg} />;
   }
-  if ( articleLoading ) {
+  if ( contentLoading ) {
     return <Spin  size="large" className={classes['article-loading']} />;
   }
+  console.log(defaultImage);
   return (
   <article className={classes.article}>
     <header className={classes.article__header}>
@@ -60,7 +62,7 @@ const Article = ({ articleLoading, curArticle, getNewArticle, errorMsg, slug }: 
           className={classes['article__author-img']}
           width="46"
           height="46"
-          src={image}
+          src={image || defaultImage}
           alt={username}
         />
       </div>
@@ -76,7 +78,7 @@ const Article = ({ articleLoading, curArticle, getNewArticle, errorMsg, slug }: 
 };
 
 const mapStateToProps = (state: StateType) => ({
-  articleLoading: state.articleLoading,
+  contentLoading: state.contentLoading,
   curArticle: state.curArticle,
   errorMsg: state.error,
 });
