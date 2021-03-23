@@ -1,3 +1,5 @@
+import ServerErrors from './ServerErrors';
+
 export default class ServerRequestService {
 
   protected readonly API_PATH = 'https://conduit.productionready.io/api';
@@ -13,21 +15,25 @@ export default class ServerRequestService {
     );
   }
 
-  public async getResource(path: string, getParams: Object = {}, method: string = 'GET', postParams: Object = {}) {
+  public async getResource(path: string, getParams: Object = {}, method: string = 'GET', postParams: Object | null = {}, headers = {}) {
     const queryString = this.makeQueryString({
       ...getParams,
     });
     const url = `${this.API_PATH}${path}?${queryString}`;
-    const params: any = { method };
+    const params: any = { method, headers };
 
     if (method === 'POST') {
       params.body = JSON.stringify(postParams);
       params.headers = { 'Content-Type': 'application/json;charset=utf-8' };
     }
-
     const response = await fetch(url, params);
-
+    
     if (!response.ok) {
+      console.log(response);
+      const body: any = await response.json().catch(() => {});
+      if (body?.errors) {
+        throw new ServerErrors(body.errors);
+      }
       throw new Error(`Could not fetch ${url}, received ${response.status}`);
     }
 

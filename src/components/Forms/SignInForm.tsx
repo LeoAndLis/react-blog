@@ -5,12 +5,16 @@ import { Link } from 'react-router-dom';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormButton from './FormElements/FormButton/FormButton';
+import { UserType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
-const SignInForm = () => {
+type SignInFormPropsType = {
+  onSubmit: (user: UserType) => void;
+};
+
+const SignInForm = ({ onSubmit }: SignInFormPropsType) => {
   const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data: any) => console.log(data);
   const validationRules = {
     email: {
       required: 'Email address is required',

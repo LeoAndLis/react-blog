@@ -6,12 +6,16 @@ import FormCheckbox from './FormElements/FormCheckbox/FormCheckbox';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormButton from './FormElements/FormButton/FormButton';
+import { UserType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
-const SignUpForm = () => {
+type SignUpFormPropsType = {
+  onSubmit: (user: UserType) => any;
+};
+
+const SignUpForm = ({ onSubmit }: SignUpFormPropsType) => {
   const { register, handleSubmit, watch, errors } = useForm();
-  const onSubmit = (data: any) => console.log(data);
   const currentPassword: string = watch('password', '');
   const validationRules = {
     username: {

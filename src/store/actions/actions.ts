@@ -15,7 +15,7 @@ const setArticlesListAction = (payload: ArticleType[]) => ({ type: SET_ARTICLES_
 const setArticlesCountAction = (payload: number) => ({ type: SET_ARTICLES_COUNT, payload });
 const setContentLoadingAction = (payload: boolean) => ({ type: SET_CONTENT_LOADING, payload });
 const setErrorAction = (payload: string) => ({ type: SET_ERROR, payload });
-const setUserAction = (payload: UserType) => ({ type: SET_USER, payload });
+export const setUserAction = (payload: UserType | null) => ({ type: SET_USER, payload });
 
 const articlesService = new ArticlesService();
 const userService = new UserService();
@@ -49,7 +49,7 @@ export const authenticateUser = (userData: UserType) => (dispatch: any) => {
   dispatch(setErrorAction(''));
   userService.authentication(userData)
     .then((result) => {
-      dispatch(setUserAction(result));
+      dispatch(setUserAction(result.user));
     })
     .catch((errors) => {console.log(errors);})
     .finally(() => dispatch(setContentLoadingAction(false)));
@@ -59,7 +59,7 @@ export const registerUser = (userData: UserType) => (dispatch: any) => {
   setContentLoadingAction(true);
   dispatch(setErrorAction(''));
   userService.registration(userData)
-    .then( (result) => dispatch(setUserAction(result)) )
+    .then( (result) => dispatch(setUserAction(result.user)) )
     .catch((errors) => {console.log(errors);})
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
