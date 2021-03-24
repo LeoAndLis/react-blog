@@ -19,11 +19,12 @@ export default class AuthService {
   }
 
   public getCurrentUser(userToken: string): Promise<{ user: UserType }> {
-    const header = { 'Authentication': `Token ${userToken}` };
+    const header = { 'Authorization': `Token ${userToken}` };
     return this.apiRequest.getResource(this.API_USER_PATH, {}, 'GET', {}, header);
   }
 
-  public udpateUser(postParams: UserType): Promise<{ user: UserType }> {
-    return this.apiRequest.getResource(this.API_USER_PATH, {}, 'PUT', postParams);
+  public updateUser(postParams: UserType, userToken: string): Promise<{ user: UserType }> {
+    const header = { 'Authorization': `Token ${userToken}` };
+    return this.apiRequest.getResource(this.API_USER_PATH, {}, 'PUT', { 'user': postParams }, header);
   }
 }

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import classes from './FormInput.module.scss';
 
 type FormInputType = {
-  error?: '';
+  error?: string;
   label: string;
   name: string;
   placeholder?: string;

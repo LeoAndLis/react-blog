@@ -4,6 +4,7 @@ import articlesListReducer from './articlesListReducer';
 import contentLoadingReducer from './contentLoadingReducer';
 import articleReducer from './articleReducer';
 import errorReducer from './errorReducer';
+import userLoadingReducer from './userLoadingReducer';
 import userReducer from './userReducer';
 
 const reducer = combineReducers({
@@ -12,6 +13,7 @@ const reducer = combineReducers({
   contentLoading: contentLoadingReducer,
   curArticle: articleReducer,
   error: errorReducer,
+  userLoading: userLoadingReducer,
   user: userReducer,
 });
 

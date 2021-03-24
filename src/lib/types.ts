@@ -40,5 +40,6 @@ export type StateType = {
   contentLoading: boolean;
   curArticle: ArticleType;
   error: string;
+  userLoading: boolean;
   user: UserType;
 };

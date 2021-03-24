@@ -18,7 +18,7 @@ type ArticleParamsType = {
 };
 
 const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: ArticleParamsType) => {
-  useEffect(() => {console.log('article create', slug);getNewArticle(slug);},
+  useEffect(() => getNewArticle(slug),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
   const { title, description, body, tagList, createdAt, favoritesCount, author } = curArticle;
@@ -33,7 +33,6 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: 
   if ( contentLoading ) {
     return <Spin  size="large" className={classes['article-loading']} />;
   }
-  console.log(defaultImage);
   return (
   <article className={classes.article}>
     <header className={classes.article__header}>

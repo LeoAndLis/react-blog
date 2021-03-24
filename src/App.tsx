@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { setCurrentUser as setCurrentUserAction } from './store/actions/actions';
 import ArticlesList from './components/ArticlesList/ArticlesList';
 import Article from './components/Article/Article';
 import HeaderComponent from './components/HeaderComponent/HeaderComponent';
@@ -9,7 +11,15 @@ import SignUpComponent from './components/SignUpComponent/SignUpComponent';
 
 import classes from './App.module.scss';
 
-function App() {
+type AppPropsType = {
+  setCurrentUser: () => void;
+};
+
+function App({ setCurrentUser }: AppPropsType) {
+  useEffect(() => {
+    setCurrentUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className={classes.app}>
       <Router>
@@ -35,4 +45,6 @@ function App() {
   );
 }
 
-export default App;
+const mapDispatchToProps = (dispatch: any) => ({ setCurrentUser: () => dispatch(setCurrentUserAction()) });
+
+export default connect(null, mapDispatchToProps)(App);

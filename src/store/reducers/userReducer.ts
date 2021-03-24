@@ -6,16 +6,7 @@ type ReducerActionType = {
   payload: UserType;
 };
 
-const defaultState: UserType = {
-  bio: '',
-  email: '',
-  image: null,
-  password: '',
-  token: '',
-  username: '',
-};
-
-const articleReducer = (state: UserType = defaultState, { type, payload }: ReducerActionType) => {
+const articleReducer = (state: UserType | null = null, { type, payload }: ReducerActionType) => {
   switch (type) {
     case SET_USER:
       return payload;

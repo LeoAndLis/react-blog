@@ -15,7 +15,7 @@ export default class ServerRequestService {
     );
   }
 
-  public async getResource(path: string, getParams: Object = {}, method: string = 'GET', postParams: Object | null = {}, headers = {}) {
+  public async getResource(path: string, getParams: Object = {}, method: string = 'GET', postParams: Object | null = {}, headers: Object = {}) {
     const queryString = this.makeQueryString({
       ...getParams,
     });
@@ -29,7 +29,6 @@ export default class ServerRequestService {
     const response = await fetch(url, params);
     
     if (!response.ok) {
-      console.log(response);
       const body: any = await response.json().catch(() => {});
       if (body?.errors) {
         throw new ServerErrors(body.errors);

@@ -4,12 +4,30 @@ import { useForm } from 'react-hook-form';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormButton from './FormElements/FormButton/FormButton';
+import { UserType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
-const ProfileForm = () => {
-  const { register, handleSubmit, errors } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+type ProfileFormDataType = {
+  email: string;
+  image: string | null;
+  password: string;
+  username: string;
+};
+
+type ProfileFormPropsType = {
+  user: UserType;
+  onSubmit: (user: UserType) => void;
+};
+
+const ProfileForm = ({ user, onSubmit }: ProfileFormPropsType) => {
+  const { register, handleSubmit, errors } = useForm<ProfileFormDataType>({
+    defaultValues: {
+      username: user?.username || '',
+      email: user?.email || '',
+      image: user?.image || '',
+    },
+  });
   const validationRules = {
     username: {
       required: 'Name is required',
@@ -30,7 +48,6 @@ const ProfileForm = () => {
       },
     },
     password: {
-      required: 'Password is required',
       maxLength: {
         value: 40,
         message: 'Password needs to be not longer then 40 characters',
