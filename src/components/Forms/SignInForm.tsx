@@ -5,15 +5,16 @@ import { Link } from 'react-router-dom';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormButton from './FormElements/FormButton/FormButton';
-import { UserType } from '../../lib/types';
+import { ValidationErrorsType, UserType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
 type SignInFormPropsType = {
+  validationErrors: ValidationErrorsType;
   onSubmit: (user: UserType) => void;
 };
 
-const SignInForm = ({ onSubmit }: SignInFormPropsType) => {
+const SignInForm = ({ validationErrors, onSubmit }: SignInFormPropsType) => {
   const { register, handleSubmit, errors } = useForm();
   const validationRules = {
     email: {
@@ -38,7 +39,7 @@ const SignInForm = ({ onSubmit }: SignInFormPropsType) => {
           placeholder="Email address"
           name="email"
           refParam={register(validationRules.email)}
-          error={errors.email && errors.email.message}
+          error={(errors.email && errors.email.message) || validationErrors?.email}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
@@ -48,7 +49,7 @@ const SignInForm = ({ onSubmit }: SignInFormPropsType) => {
           type="password"
           name="password"
           refParam={register(validationRules.password)}
-          error={errors.password && errors.password.message}
+          error={(errors.password && errors.password.message) || validationErrors?.password}
         />
       </div>
       <div className={classes['form__button-wrapper']}>

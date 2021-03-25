@@ -6,15 +6,16 @@ import FormCheckbox from './FormElements/FormCheckbox/FormCheckbox';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormButton from './FormElements/FormButton/FormButton';
-import { UserType } from '../../lib/types';
+import { ValidationErrorsType, UserType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
 type SignUpFormPropsType = {
+  validationErrors: ValidationErrorsType;
   onSubmit: (user: UserType) => any;
 };
 
-const SignUpForm = ({ onSubmit }: SignUpFormPropsType) => {
+const SignUpForm = ({ validationErrors, onSubmit }: SignUpFormPropsType) => {
   const { register, handleSubmit, watch, errors } = useForm();
   const currentPassword: string = watch('password', '');
   const validationRules = {
@@ -65,7 +66,7 @@ const SignUpForm = ({ onSubmit }: SignUpFormPropsType) => {
           placeholder="Username"
           name="username"
           refParam={register(validationRules.username)}
-          error={errors.username && errors.username.message}
+          error={(errors.username && errors.username.message) || validationErrors?.username}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
@@ -74,7 +75,7 @@ const SignUpForm = ({ onSubmit }: SignUpFormPropsType) => {
           placeholder="Email address"
           name="email"
           refParam={register(validationRules.email)}
-          error={errors.email && errors.email.message}
+          error={(errors.email && errors.email.message) || validationErrors?.email}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
@@ -84,7 +85,7 @@ const SignUpForm = ({ onSubmit }: SignUpFormPropsType) => {
           type="password"
           name="password"
           refParam={register(validationRules.password)}
-          error={errors.password && errors.password.message}
+          error={(errors.password && errors.password.message) || validationErrors?.password}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>

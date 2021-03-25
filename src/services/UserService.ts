@@ -1,5 +1,5 @@
 import ServerRequestService from './ServerRequestService';
-import { UserType } from '../lib/types';
+import { UserType, UserEditType } from '../lib/types';
 
 export default class AuthService {
   apiRequest = new ServerRequestService();
@@ -23,8 +23,8 @@ export default class AuthService {
     return this.apiRequest.getResource(this.API_USER_PATH, {}, 'GET', {}, header);
   }
 
-  public updateUser(postParams: UserType, userToken: string): Promise<{ user: UserType }> {
-    const header = { 'Authorization': `Token ${userToken}` };
+  public updateUser(postParams: UserEditType): Promise<{ user: UserType }> {
+    const header = { 'Authorization': `Token ${postParams.token}` };
     return this.apiRequest.getResource(this.API_USER_PATH, {}, 'PUT', { 'user': postParams }, header);
   }
 }

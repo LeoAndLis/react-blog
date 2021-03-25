@@ -14,7 +14,7 @@ type ArticlesListItemPropsType = {
 const ArticlesListItem = ({ article }: ArticlesListItemPropsType) => {
   const { slug, title, description, tagList, createdAt, favoritesCount, author } = article;
   const { username, image } = author;
-  const tags = tagList.map((tag) => <li key={tag} className={classes['articles-tags__item']}>{tag}</li>);
+  const tags = tagList.map((tag) => <li key={tag} className={classes['article-tags__item']}>{tag}</li>);
   return (
     <article className={classes.article}>
       <header className={classes.article__header}>
@@ -32,7 +32,7 @@ const ArticlesListItem = ({ article }: ArticlesListItemPropsType) => {
             </button>
             <span className={classes['article__favorite-count']}>{favoritesCount}</span>
           </div>
-          <ul className={classNames(classes.article__tags, classes['articles-tags'])}>
+          <ul className={classNames(classes.article__tags, classes['article-tags'])}>
             {tags}
           </ul>
         </div>

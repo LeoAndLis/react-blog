@@ -1,4 +1,4 @@
-import ServerErrors from './ServerErrors';
+import ValidationErrors from './ValidationErrors';
 
 export default class ServerRequestService {
 
@@ -22,16 +22,16 @@ export default class ServerRequestService {
     const url = `${this.API_PATH}${path}?${queryString}`;
     const params: any = { method, headers };
 
-    if (method === 'POST') {
+    if (method !== 'GET') {
       params.body = JSON.stringify(postParams);
-      params.headers = { 'Content-Type': 'application/json;charset=utf-8' };
+      params.headers['Content-Type'] = 'application/json;charset=utf-8';
     }
     const response = await fetch(url, params);
     
     if (!response.ok) {
       const body: any = await response.json().catch(() => {});
       if (body?.errors) {
-        throw new ServerErrors(body.errors);
+        throw new ValidationErrors(body.errors);
       }
       throw new Error(`Could not fetch ${url}, received ${response.status}`);
     }

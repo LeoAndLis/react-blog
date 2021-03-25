@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Spin } from 'antd';
 import { StateType, UserType } from '../../lib/types';
-import { setUserAction } from '../../store/actions/actions';
+import { setUserAuthorizedAction, setUserAction } from '../../store/actions/actions';
 import { setUserToken } from '../../lib/storage';
 
 import defaultImage from '../../assets/images/smiley-cyrus.jpg';
@@ -14,12 +14,14 @@ type HeaderComponentPropsType = {
   user: UserType;
   userLoading: boolean;
   setUser: (user: UserType | null) => void;
+  setUserUnauthorized: () => void;
 };
 
-const HeaderComponent = ({ user, userLoading, setUser }: HeaderComponentPropsType) => {
+const HeaderComponent = ({ user, userLoading, setUser, setUserUnauthorized }: HeaderComponentPropsType) => {
   const onLogOut = () => {
     setUser(null);
     setUserToken(null);
+    setUserUnauthorized();
   };
   let authBlock = <Spin className={classes.auth__loading} size="small" />;
   if (!userLoading) {
@@ -72,6 +74,9 @@ const mapStateToProps = (state: StateType) => ({
   userLoading: state.userLoading,
 });
 
-const mapDespatchToProps = (dispatch: any) => ({ setUser: (user: UserType | null) => dispatch(setUserAction(user)) });
+const mapDespatchToProps = (dispatch: any) => ({
+  setUserUnauthorized: () => dispatch(setUserAuthorizedAction(false)),
+  setUser: (user: UserType | null) => dispatch(setUserAction(user)),
+});
 
 export default connect(mapStateToProps, mapDespatchToProps)(HeaderComponent);

@@ -1,4 +1,4 @@
-export default class ServerErrors extends Error {
+export default class ValidationErrors extends Error {
   errors: any = {};
 
   constructor(errors?: any) {

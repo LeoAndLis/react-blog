@@ -25,7 +25,7 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: 
   const { image, username } = author;
   let tags = null;
   if ( tagList !== undefined ) {
-    tags = tagList.map((tag: string) => <li key={tag} className={classes['articles-tags__item']}>{tag}</li>);
+    tags = tagList.map((tag: string) => <li key={tag} className={classes['article-tags__item']}>{tag}</li>);
   }
   if ( errorMsg.length ) {
     return <Alert className={classes['article-error']} type="error" message="Error" description={errorMsg} />;
@@ -50,7 +50,7 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: 
           </button>
           <span className={classes['article__favorite-count']}>{favoritesCount}</span>
         </div>
-        <ul className={classNames(classes.article__tags, classes['articles-tags'])}>
+        <ul className={classNames(classes['article-tags'], classes.article__tags)}>
           {tags}
         </ul>
       </div>

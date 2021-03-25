@@ -25,11 +25,26 @@ export type ProfileType = {
   following: boolean;
 };
 
+export type ValidationErrorsType = {
+  email?: string;
+  'email or password'?: string[];
+  password?: string;
+  username?: string;
+} | null;
+
 export type UserType = {
   bio?: string;
   email: string;
   image?: string | null;
   password: string;
+  token?: string;
+  username: string;
+};
+
+export type UserEditType = {
+  email: string;
+  image?: string | null;
+  password?: string;
   token?: string;
   username: string;
 };
@@ -40,6 +55,8 @@ export type StateType = {
   contentLoading: boolean;
   curArticle: ArticleType;
   error: string;
-  userLoading: boolean;
+  validationErrors: ValidationErrorsType;
   user: UserType;
+  userIsAuthorized: boolean;
+  userLoading: boolean;
 };

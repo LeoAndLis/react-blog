@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormButton from './FormElements/FormButton/FormButton';
-import { UserType } from '../../lib/types';
+import { ValidationErrorsType, UserType, UserEditType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
@@ -16,18 +16,38 @@ type ProfileFormDataType = {
 };
 
 type ProfileFormPropsType = {
+  validationErrors: ValidationErrorsType;
   user: UserType;
-  onSubmit: (user: UserType) => void;
+  onSubmit: (user: UserEditType) => void;
 };
 
-const ProfileForm = ({ user, onSubmit }: ProfileFormPropsType) => {
-  const { register, handleSubmit, errors } = useForm<ProfileFormDataType>({
-    defaultValues: {
+const ProfileForm = ({ validationErrors, user, onSubmit }: ProfileFormPropsType) => {
+  const defaultValues = useMemo(
+    () => ({
       username: user?.username || '',
       email: user?.email || '',
       image: user?.image || '',
-    },
+    }),
+    [user],
+  );
+
+  const { register, handleSubmit, errors, reset } = useForm<ProfileFormDataType>({
+    defaultValues,
   });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+
+  const submitForm = ({ username, email, password, image }: UserEditType) => {
+    const editData: UserEditType = { username, email, image };
+    editData.token = user.token;
+    if (password !== '') {
+      editData.password = password;
+    }
+    onSubmit(editData);
+  };
+
   const validationRules = {
     username: {
       required: 'Name is required',
@@ -65,7 +85,7 @@ const ProfileForm = ({ user, onSubmit }: ProfileFormPropsType) => {
     },
   };
   return (
-    <form className={classNames(classes.form, classes['form--small'])} onSubmit={handleSubmit(onSubmit)}>
+    <form className={classNames(classes.form, classes['form--small'])} onSubmit={handleSubmit(submitForm)}>
       <div className={classNames(classes['form__header-wrapper'], classes.form__item)}>
         <FormHeader title="Edit profile" />
       </div>
@@ -75,7 +95,7 @@ const ProfileForm = ({ user, onSubmit }: ProfileFormPropsType) => {
           placeholder="Username"
           name="username"
           refParam={register(validationRules.username)}
-          error={errors.username && errors.username.message}
+          error={(errors.username && errors.username.message) || validationErrors?.username}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
@@ -84,7 +104,7 @@ const ProfileForm = ({ user, onSubmit }: ProfileFormPropsType) => {
           placeholder="Email address"
           name="email"
           refParam={register(validationRules.email)}
-          error={errors.email && errors.email.message}
+          error={(errors.email && errors.email.message) || validationErrors?.email}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
