@@ -28,7 +28,7 @@ const HeaderComponent = ({ user, userLoading, setUser, setUserUnauthorized }: He
     authBlock = user ? (
       <>
         <Link
-          to="/create-article"
+          to="/new-article"
           className={classNames(classes['auth__links--green'], classes['auth__links--small'], classes.auth__links)}
         >
           Create article

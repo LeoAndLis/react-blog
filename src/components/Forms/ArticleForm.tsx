@@ -1,10 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
+import FormButton from './FormElements/FormButton/FormButton';
 import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
+import FormTags from './FormElements/FormTags/FormTags';
 import FormTextarea from './FormElements/FormTextarea/FormTextarea';
-import FormButton from './FormElements/FormButton/FormButton';
 import { ArticleType } from '../../lib/types';
 
 import classes from './Form.module.scss';
@@ -65,6 +66,9 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
           refParam={register(validationRules.text)}
           error={errors.body && errors.body.message}
         />
+      </div>
+      <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
+        <FormTags />
       </div>
       <div className={classes['form__button-wrapper']}>
         <FormButton type="submit" label="Login" />
