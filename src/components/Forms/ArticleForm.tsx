@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useForm } from 'react-hook-form';
 import FormButton from './FormElements/FormButton/FormButton';
@@ -24,6 +24,16 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
       body: article?.body || '',
     },
   });
+  const [ tags, setTags ] = useState(['tag 1', 'tag 2', 'tag 3']);
+  const onAddTag = () => setTags([...tags, '']);
+  const onChangeTag = (newTag: string, index: number) => setTags(tags.map((tag, curIndex) => index === curIndex ? newTag : tag));
+  const onDeleteTag = (index: number) => setTags(tags.filter((tag, curIndex) => curIndex !== index ));
+  const onSubmitArticle = (data: any) => {
+    console.log(data);
+    const curData = { ...data, tags };
+    console.log(curData);
+    onSubmit(curData);
+  };
   const validationRules = {
     title: {
       required: 'Email address is required',
@@ -36,7 +46,7 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
     },
   };
   return (
-    <form className={classNames(classes.form, classes['form--large'])} onSubmit={handleSubmit(onSubmit)}>
+    <form className={classNames(classes.form, classes['form--large'])} onSubmit={handleSubmit(onSubmitArticle)}>
       <div className={classNames(classes['form__header-wrapper'], classes.form__item)}>
         <FormHeader title={formTitle} />
       </div>
@@ -68,7 +78,7 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
-        <FormTags />
+        <FormTags tagsList={tags} onAdd={onAddTag} onChange={onChangeTag} onDelete={onDeleteTag} />
       </div>
       <div className={classes['form__button-wrapper']}>
         <FormButton type="submit" label="Login" />
