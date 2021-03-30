@@ -5,6 +5,7 @@ import { setCurrentUser as setCurrentUserAction } from './store/actions/actions'
 import ArticlesList from './components/ArticlesList/ArticlesList';
 import Article from './components/Article/Article';
 import ArticleCreate from './components/ArticleCreate/ArticleCreate';
+import ArticleEdit from './components/ArticleEdit/ArticleEdit';
 import HeaderComponent from './components/HeaderComponent/HeaderComponent';
 import ProfileComponent from './components/ProfileComponent/ProfileComponent';
 import SignInComponent from './components/SignInComponent/SignInComponent';
@@ -40,6 +41,13 @@ function App({ setCurrentUser }: AppPropsType) {
             <Route path="/sign-in" exact component={SignInComponent} />
             <Route path="/profile" exact component={ProfileComponent} />
             <Route path="/new-article" exact component={ArticleCreate} />
+            <Route
+              path="/articles/{slug}/edit"
+              render={({ match }: any) => {
+                const { slug } = match.params;
+                return <ArticleEdit slug={slug} />;
+              }}
+            />
           </section>
         </main>
       </Router>

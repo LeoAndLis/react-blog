@@ -11,16 +11,13 @@ type ArticleCreateProps = {
   error: string;
 };
 
-const ArticleCreate = ({ contentLoading, error }: ArticleCreateProps) => {
-  console.log('article create');
-  return (
-    <>
-      {contentLoading && <Spin className={classes['loading-block']} size="large" />}
-      {error && <Alert className={classes['error-block']} type="error" message="Error" closable description={error} />}
-      <ArticleForm article={null} formTitle="Create new article" onSubmit={() => {}} />
-    </>
-  );
-};
+const ArticleCreate = ({ contentLoading, error }: ArticleCreateProps) => (
+  <>
+    {contentLoading && <Spin className={classes['loading-block']} size="large" />}
+    {error && <Alert className={classes['error-block']} type="error" message="Error" closable description={error} />}
+    <ArticleForm article={null} formTitle="Create new article" onSubmit={() => {}} />
+  </>
+);
 
 const mapStateToProps = (state: StateType) => ({
   contentLoading: state.contentLoading,

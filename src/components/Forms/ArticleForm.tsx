@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
+import { nanoid } from 'nanoid';
 import { useForm } from 'react-hook-form';
 import FormButton from './FormElements/FormButton/FormButton';
 import FormHeader from './FormElements/FormHeader/FormHeader';
@@ -24,10 +25,22 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
       body: article?.body || '',
     },
   });
-  const [ tags, setTags ] = useState(['tag 1', 'tag 2', 'tag 3']);
-  const onAddTag = () => setTags([...tags, '']);
-  const onChangeTag = (newTag: string, index: number) => setTags(tags.map((tag, curIndex) => index === curIndex ? newTag : tag));
-  const onDeleteTag = (index: number) => setTags(tags.filter((tag, curIndex) => curIndex !== index ));
+  const defaultTags = article?.tagList || ['', '', ''];
+  const mappedTags = new Map(defaultTags.map((tag) => ([nanoid(), tag])));
+  const [ tags, setTags ] = useState<Map<string, string>>(mappedTags);
+  const onAddTag = () => setTags((oldTags) => {
+    const newTags = new Map(oldTags.entries());
+    return newTags.set(nanoid(), '');
+  });
+  const onChangeTag = (newTag: string, key: string) => setTags((oldTags) => {
+    const newTags = new Map(oldTags.entries());
+    return newTags.set(key, newTag);
+  });
+  const onDeleteTag = (key: string) => setTags((oldTags) => {
+    const newTags = new Map(oldTags.entries());
+    newTags.delete(key);
+    return newTags;
+  });
   const onSubmitArticle = (data: any) => {
     console.log(data);
     const curData = { ...data, tags };
@@ -81,7 +94,7 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
         <FormTags tagsList={tags} onAdd={onAddTag} onChange={onChangeTag} onDelete={onDeleteTag} />
       </div>
       <div className={classes['form__button-wrapper']}>
-        <FormButton type="submit" label="Login" />
+        <FormButton type="submit" label="Save" />
       </div>
     </form>
   );
