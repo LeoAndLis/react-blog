@@ -1,0 +1,36 @@
+.user_controls {
+  bottom: -55px;
+  display: flex;
+  gap: 12px;
+  right: 0;
+  position: absolute;
+}
+
+.controls {
+  background-color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: color 0.5s, background-color 0.5s;
+}
+
+.delete {
+  border: 1px solid #f5222d;
+  color: #f5222d;
+  padding: 6px 17px;
+
+  &:hover {
+    background-color: #f5222d;
+    color: #fff;
+  }
+}
+
+.edit {
+  border: 1px solid #52c41a;
+  color: #52c41a;
+  padding: 6px 19px;
+
+  &:hover {
+    background-color: #52c41a;
+    color: #fff;
+  }
+}

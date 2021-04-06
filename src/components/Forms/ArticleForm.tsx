@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
 import { useForm } from 'react-hook-form';
@@ -7,27 +7,39 @@ import FormHeader from './FormElements/FormHeader/FormHeader';
 import FormInput from './FormElements/FormInput/FormInput';
 import FormTags from './FormElements/FormTags/FormTags';
 import FormTextarea from './FormElements/FormTextarea/FormTextarea';
-import { ArticleType } from '../../lib/types';
+import { AddArticleType, ArticleType } from '../../lib/types';
 
 import classes from './Form.module.scss';
 
-type ArticleFormType = {
+type ArticleFormPropsType = {
   article: ArticleType | null;
   formTitle: string;
-  onSubmit: (article: ArticleType) => void;
+  validationErrors: any;
+  onSubmit: (article: AddArticleType) => void;
 };
 
-const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
-  const { register, handleSubmit, errors } = useForm({
+type ArticleFormType = {
+  title: string;
+  description: string;
+  body: string;
+};
+
+const ArticleForm = ({ article, formTitle, validationErrors, onSubmit }: ArticleFormPropsType) => {
+  const { register, handleSubmit, errors } = useForm<ArticleFormType>({
     defaultValues: {
       title: article?.title || '',
       description: article?.description || '',
       body: article?.body || '',
     },
   });
-  const defaultTags = article?.tagList || ['', '', ''];
+  const defaultTags = useMemo(() => article?.tagList || ['', '', ''], [ article ]);
   const mappedTags = new Map(defaultTags.map((tag) => ([nanoid(), tag])));
   const [ tags, setTags ] = useState<Map<string, string>>(mappedTags);
+  useEffect(()=>{
+    if ( tags.size === 0 ) {
+      setTags(new Map(defaultTags.map((tag) => ([nanoid(), tag]))));
+    }
+  }, [ tags, defaultTags ]);
   const onAddTag = () => setTags((oldTags) => {
     const newTags = new Map(oldTags.entries());
     return newTags.set(nanoid(), '');
@@ -41,9 +53,19 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
     newTags.delete(key);
     return newTags;
   });
-  const onSubmitArticle = (data: any) => {
+  const onSubmitArticle = (data: ArticleFormType) => {
     console.log(data);
-    const curData = { ...data, tags };
+    for (const entry of tags) {
+      console.log(entry);
+      if (entry[1] === '') {
+        tags.delete(entry[0]);
+      }
+    }
+    let curTags: string[] = [];
+    if ( tags.size ) {
+      curTags = [...new Set(tags.values())];
+    }
+    const curData = { ...data, tagList: curTags };
     console.log(curData);
     onSubmit(curData);
   };
@@ -51,7 +73,7 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
     title: {
       required: 'Email address is required',
     },
-    shortDescription: {
+    description: {
       required: 'Email address is required',
     },
     text: {
@@ -69,16 +91,16 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
           placeholder="Title"
           name="title"
           refParam={register(validationRules.title)}
-          error={errors.title && errors.title.message}
+          error={(errors.title && errors.title.message) || validationErrors?.title}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
         <FormInput
           label="Short description"
           placeholder="Short description"
-          name="shortDescription"
-          refParam={register(validationRules.shortDescription)}
-          error={errors.description && errors.description.message}
+          name="description"
+          refParam={register(validationRules.description)}
+          error={(errors.description && errors.description.message) || validationErrors?.description}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>
@@ -87,7 +109,7 @@ const ArticleForm = ({ article, formTitle, onSubmit }: ArticleFormType) => {
           placeholder="Text"
           name="body"
           refParam={register(validationRules.text)}
-          error={errors.body && errors.body.message}
+          error={(errors.body && errors.body.message) || validationErrors?.body}
         />
       </div>
       <div className={classNames(classes['form__input-wrapper'], classes.form__item)}>

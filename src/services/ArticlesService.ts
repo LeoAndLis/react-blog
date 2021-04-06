@@ -1,12 +1,5 @@
 import ServerRequestService from './ServerRequestService';
-import { ArticleType } from '../lib/types';
-
-type ArticleParamsType = {
-  title: string;
-  description: string;
-  body: string;
-  tagList?: string[];
-};
+import { AddArticleType, ArticleType } from '../lib/types';
 
 export default class ArticlesService {
   apiRequest = new ServerRequestService();
@@ -21,8 +14,10 @@ export default class ArticlesService {
 
   protected readonly API_UPDATE_ARTICLE_PATH = '/articles/{slug}';
   
-  public addArticle(postParams: ArticleParamsType): Promise<ArticleType> {
-    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, {}, 'POST', postParams);
+  public addArticle(postParams: AddArticleType, userToken?: string): Promise<{ article: ArticleType }> {
+    const curToken = userToken || '';
+    const header = { 'Authorization': `Token ${curToken}` };
+    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, {}, 'POST', { article: postParams }, header);
   }
 
   public getArticle(articleSlug: string): Promise<{ article: ArticleType }> {
@@ -38,7 +33,7 @@ export default class ArticlesService {
     return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH);
   }
 
-  public updateArticle(articleSlug: string, postParams: ArticleParamsType): Promise<ArticleType> {
+  public updateArticle(articleSlug: string, postParams: AddArticleType): Promise<ArticleType> {
     const path = this.API_UPDATE_ARTICLE_PATH.replace('{slug}', articleSlug);
     return this.apiRequest.getResource(path, {}, 'PUT', postParams);
   }

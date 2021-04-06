@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Pagination, Spin } from 'antd';
 import ArticlesListItem from '../ArticlesListItem/ArticlesListItem';
@@ -16,11 +16,16 @@ type ArticlesListPropsType = {
 };
 
 const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, setNewArticles }: ArticlesListPropsType) => {
+  const [page, setPage] = useState(1);
   useEffect(() => {
     setNewArticles(0, 20);
   },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   []);
+  const onChangePage = (newPage: number, pageSize: number | undefined) => {
+    setPage(newPage);
+    setNewArticles(newPage, pageSize);
+  };
   const articles = <ul className={classes['articles-list']}>
     {articlesList.map((article) => <li key={article.slug} className="articles-list__item"><ArticlesListItem
       article={article} /></li>)}
@@ -29,11 +34,12 @@ const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, s
   const spinner = contentLoading ? <Spin size="large" className={classes['articles-loading']} /> : null;
   const pagination = articlesCount && !contentLoading ?
     <Pagination
+      current={page}
       className={classes['articles-pagination']}
       size="small"
       defaultPageSize={20}
       showSizeChanger={false}
-      onChange={setNewArticles}
+      onChange={onChangePage}
       total={articlesCount}
     /> : null;
   return (

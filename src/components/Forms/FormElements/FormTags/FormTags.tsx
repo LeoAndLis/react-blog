@@ -16,7 +16,7 @@ const FormTags = ({ tagsList, onAdd, onChange, onDelete }: FormTagsType) => {
       <input
         className={classes['tags-list__input']}
         type="text"
-        name="1"
+        name={`tag-${index}`}
         value={tag}
         onChange={(event) => onChange(event.target.value, key)}
       />

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { format } from 'date-fns';
 import { Alert, Spin } from 'antd';
+import ArticleUserControls from '../ArticleUserControls/ArticleUserControls';
 import { setArticle } from '../../store/actions/actions';
 import { ArticleType, StateType } from '../../lib/types';
 
@@ -15,12 +16,13 @@ type ArticleParamsType = {
   getNewArticle: any;
   errorMsg: string;
   slug: string;
+  userIsAuthorized: boolean;
 };
 
-const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: ArticleParamsType) => {
-  useEffect(() => getNewArticle(slug),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, userIsAuthorized }: ArticleParamsType) => {
+  const loadNewArticle = useCallback((value: string) => getNewArticle(value), [ getNewArticle ]);
+  useEffect(() => loadNewArticle(slug),
+    [ slug, loadNewArticle ]);
   const { title, description, body, tagList, createdAt, favoritesCount, author } = curArticle;
   const { image, username } = author;
   let tags = null;
@@ -64,6 +66,7 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug }: 
           src={image || defaultImage}
           alt={username}
         />
+        { userIsAuthorized && <ArticleUserControls slug={curArticle.slug} onDelete={() => {}} /> }
       </div>
     </header>
     <p className={classes.article__description}>
@@ -80,6 +83,7 @@ const mapStateToProps = (state: StateType) => ({
   contentLoading: state.contentLoading,
   curArticle: state.curArticle,
   errorMsg: state.error,
+  userIsAuthorized: state.userIsAuthorized,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({ getNewArticle: (slug: string) => dispatch(setArticle(slug)) });

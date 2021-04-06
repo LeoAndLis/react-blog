@@ -10,15 +10,19 @@ type ArticleEditProps = {
   contentLoading: boolean;
   error: string;
   slug: string;
+  validationErrors: any;
 };
 
-const ArticleEdit = ({ contentLoading, error, slug }: ArticleEditProps) => {
-  useEffect(() => console.log(slug), [ slug ]);
+const ArticleEdit = ({ contentLoading, error, slug, validationErrors }: ArticleEditProps) => {
+  useEffect(() => {
+
+    console.log(slug);
+  }, [ slug ] );
   return (
     <>
       {contentLoading && <Spin className={classes['loading-block']} size="large" />}
       {error && <Alert className={classes['error-block']} type="error" message="Error" closable description={error} />}
-      <ArticleForm article={null} formTitle="Edit article" onSubmit={() => {}} />
+      <ArticleForm article={null} formTitle="Edit article" onSubmit={() => {}} validationErrors={validationErrors} />
     </>
   );
 };
@@ -26,6 +30,7 @@ const ArticleEdit = ({ contentLoading, error, slug }: ArticleEditProps) => {
 const mapStateToProps = (state: StateType) => ({
   contentLoading: state.contentLoading,
   error: state.error,
+  validationErrors: state.validationErrors,
 });
 
 const mapDispatchToProps = () => ({});

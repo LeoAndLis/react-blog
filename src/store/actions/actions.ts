@@ -9,10 +9,11 @@ import {
   SET_USER_LOADING,
   SET_USER,
 } from '../types/types';
+import store from '../store';
 import ArticlesService from '../../services/ArticlesService';
 import UserService from '../../services/UserService';
 import { getUserToken, setUserToken } from '../../lib/storage';
-import { ArticleType, ValidationErrorsType, UserType, UserEditType } from '../../lib/types';
+import { AddArticleType, ArticleType, ValidationErrorsType, UserType, UserEditType } from '../../lib/types';
 import ValidationErrors from '../../services/ValidationErrors';
 
 const setArticleAction = (payload: ArticleType) => ({ type: SET_ARTICLE, payload });
@@ -53,6 +54,26 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
       dispatch(setArticlesCountAction(result.articlesCount));
     })
     .catch((error) => {
+      dispatch(setErrorAction(error.message));
+    })
+    .finally(() => dispatch(setContentLoadingAction(false)));
+};
+
+export const createArticle = (article: AddArticleType) => (dispatch: any) => {
+  dispatch(setContentLoadingAction(true));
+  dispatch(setValidationErrorAction(null));
+  dispatch(setErrorAction(''));
+  articlesService
+    .addArticle(article, store.getState().user?.token)
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      if (error instanceof ValidationErrors) {
+        console.log(error.errors);
+        dispatch(setValidationErrorAction(error.errors));
+      }
+      console.log(error);
       dispatch(setErrorAction(error.message));
     })
     .finally(() => dispatch(setContentLoadingAction(false)));

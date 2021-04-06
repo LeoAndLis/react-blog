@@ -1,0 +1,31 @@
+import React from 'react';
+import classNames from 'classnames';
+import { Popconfirm } from 'antd';
+import { Link } from 'react-router-dom';
+
+import classes from './ArticleUserControls.module.scss';
+
+type ArticleUserControlsPropsType = {
+  slug: string;
+  onDelete: () => void;
+};
+
+const ArticleUserControls = ({ slug, onDelete }: ArticleUserControlsPropsType) => {
+  console.log('controls', onDelete);
+  return (
+    <div className={classes.user_controls}>
+      <Popconfirm
+        cancelText="No"
+        onConfirm={() => {}}
+        okText="Yes"
+        placement="topRight"
+        title="Are you sure to delete this task?"
+      >
+        <button className={classNames(classes.delete, classes.controls)} type="button">Delete</button>
+      </Popconfirm>
+      <Link className={classNames(classes.edit, classes.controls)} to={`/articles/${slug}/edit`}>Edit</Link>
+    </div>
+  );
+};
+
+export default ArticleUserControls;

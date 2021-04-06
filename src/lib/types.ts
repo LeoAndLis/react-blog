@@ -5,6 +5,13 @@ export type AuthorType = {
   following: boolean;
 };
 
+export type AddArticleType = {
+  title: string;
+  description: string;
+  body: string;
+  tagList?: string[];
+};
+
 export type ArticleType = {
   slug: string;
   title: string;
