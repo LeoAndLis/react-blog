@@ -13,10 +13,10 @@ import classes from './Article.module.scss';
 type ArticleParamsType = {
   contentLoading: boolean;
   curArticle: ArticleType;
-  getNewArticle: any;
   errorMsg: string;
   slug: string;
   userIsAuthorized: boolean;
+  getNewArticle: (value: string) => void;
 };
 
 const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, userIsAuthorized }: ArticleParamsType) => {

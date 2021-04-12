@@ -31,8 +31,19 @@ function App({ setCurrentUser }: AppPropsType) {
             <Route path="/" exact component={ArticlesList} />
             <Route path="/articles" exact component={ArticlesList} />
             <Route
+              exact
+              path="/articles/:slug/edit"
+              render={({ match }: any) => {
+                console.log('route render article edit');
+                const { slug } = match.params;
+                return <ArticleEdit slug={slug} />;
+              }}
+            />
+            <Route
+              exact
               path="/articles/:slug"
               render={({ match }: any) => {
+                console.log('route render article');
                 const { slug } = match.params;
                 return <Article slug={slug} />;
               }}
@@ -41,13 +52,6 @@ function App({ setCurrentUser }: AppPropsType) {
             <Route path="/sign-in" exact component={SignInComponent} />
             <Route path="/profile" exact component={ProfileComponent} />
             <Route path="/new-article" exact component={ArticleCreate} />
-            <Route
-              path="/articles/{slug}/edit"
-              render={({ match }: any) => {
-                const { slug } = match.params;
-                return <ArticleEdit slug={slug} />;
-              }}
-            />
           </section>
         </main>
       </Router>

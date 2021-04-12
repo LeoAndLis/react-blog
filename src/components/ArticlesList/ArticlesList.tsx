@@ -18,7 +18,7 @@ type ArticlesListPropsType = {
 const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, setNewArticles }: ArticlesListPropsType) => {
   const [page, setPage] = useState(1);
   useEffect(() => {
-    setNewArticles(0, 20);
+    setNewArticles(1, 20);
   },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   []);
@@ -36,6 +36,7 @@ const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, s
     <Pagination
       current={page}
       className={classes['articles-pagination']}
+      defaultCurrent={1}
       size="small"
       defaultPageSize={20}
       showSizeChanger={false}

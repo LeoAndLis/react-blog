@@ -44,6 +44,7 @@ export const setArticle = (slug: string) => (dispatch: any) => {
 };
 
 export const setArticlesList = (page: number, pageSize: number | undefined) => (dispatch: any) => {
+  console.log('set articles list', page, pageSize);
   const offset: number = page * (pageSize || 20);
   dispatch(setContentLoadingAction(true));
   dispatch(setErrorAction(''));

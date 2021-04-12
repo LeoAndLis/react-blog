@@ -18,12 +18,12 @@ const ArticleUserControls = ({ slug, onDelete }: ArticleUserControlsPropsType) =
         cancelText="No"
         onConfirm={() => {}}
         okText="Yes"
-        placement="topRight"
+        placement="rightTop"
         title="Are you sure to delete this task?"
       >
         <button className={classNames(classes.delete, classes.controls)} type="button">Delete</button>
       </Popconfirm>
-      <Link className={classNames(classes.edit, classes.controls)} to={`/articles/${slug}/edit`}>Edit</Link>
+      <Link to={`/articles/${slug}/edit`} className={classNames(classes.edit, classes.controls)}>Edit</Link>
     </div>
   );
 };
