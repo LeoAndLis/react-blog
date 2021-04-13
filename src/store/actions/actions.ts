@@ -80,6 +80,27 @@ export const createArticle = (article: AddArticleType) => (dispatch: any) => {
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
 
+export const updateArticle = (article: AddArticleType, slug?: string) => (dispatch: any) => {
+  dispatch(setContentLoadingAction(true));
+  dispatch(setValidationErrorAction(null));
+  dispatch(setErrorAction(''));
+  const curSlug = slug || '';
+  articlesService
+    .updateArticle(curSlug, article, store.getState().user?.token)
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      if (error instanceof ValidationErrors) {
+        console.log(error.errors);
+        dispatch(setValidationErrorAction(error.errors));
+      }
+      console.log(error);
+      dispatch(setErrorAction(error.message));
+    })
+    .finally(() => dispatch(setContentLoadingAction(false)));
+};
+
 export const authenticateUser = (userData: UserType) => (dispatch: any) => {
   dispatch(setContentLoadingAction(true));
   dispatch(setValidationErrorAction(null));

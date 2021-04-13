@@ -33,9 +33,11 @@ export default class ArticlesService {
     return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH);
   }
 
-  public updateArticle(articleSlug: string, postParams: AddArticleType): Promise<ArticleType> {
+  public updateArticle(articleSlug: string, postParams: AddArticleType, userToken?: string): Promise<ArticleType> {
+    const curToken = userToken || '';
+    const header = { 'Authorization': `Token ${curToken}` };
     const path = this.API_UPDATE_ARTICLE_PATH.replace('{slug}', articleSlug);
-    return this.apiRequest.getResource(path, {}, 'PUT', postParams);
+    return this.apiRequest.getResource(path, {}, 'PUT', { article: postParams }, header);
   }
 
   public deleteArticle(articleSlug: string): Promise<any> {

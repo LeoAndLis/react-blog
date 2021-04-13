@@ -15,7 +15,7 @@ type ArticleFormPropsType = {
   article: ArticleType | null;
   formTitle: string;
   validationErrors: any;
-  onSubmit: (article: AddArticleType) => void;
+  onSubmit: (article: AddArticleType, slug?: string) => void;
 };
 
 type ArticleFormType = {
@@ -67,7 +67,7 @@ const ArticleForm = ({ article, formTitle, validationErrors, onSubmit }: Article
     }
     const curData = { ...data, tagList: curTags };
     console.log(curData);
-    onSubmit(curData);
+    onSubmit(curData, article?.slug);
   };
   const validationRules = {
     title: {

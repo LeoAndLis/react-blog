@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Alert, Spin } from 'antd';
 import ArticleUserControls from '../ArticleUserControls/ArticleUserControls';
 import { setArticle } from '../../store/actions/actions';
-import { ArticleType, StateType } from '../../lib/types';
+import { ArticleType, StateType, UserType } from '../../lib/types';
 
 import defaultImage from '../../assets/images/smiley-cyrus.jpg';
 import classes from './Article.module.scss';
@@ -15,16 +15,18 @@ type ArticleParamsType = {
   curArticle: ArticleType;
   errorMsg: string;
   slug: string;
+  user: UserType;
   userIsAuthorized: boolean;
   getNewArticle: (value: string) => void;
 };
 
-const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, userIsAuthorized }: ArticleParamsType) => {
+const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, user, userIsAuthorized }: ArticleParamsType) => {
   const loadNewArticle = useCallback((value: string) => getNewArticle(value), [ getNewArticle ]);
   useEffect(() => loadNewArticle(slug),
     [ slug, loadNewArticle ]);
   const { title, description, body, tagList, createdAt, favoritesCount, author } = curArticle;
-  const { image, username } = author;
+  const { username: curUsename } = user;
+  const { image, username: articleUsername } = author;
   let tags = null;
   if ( tagList !== undefined ) {
     tags = tagList.map((tag: string) => <li key={tag} className={classes['article-tags__item']}>{tag}</li>);
@@ -57,16 +59,16 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, us
         </ul>
       </div>
       <div className={classes['article__author-block']}>
-        <span className={classes.article__author}>{username}</span>
+        <span className={classes.article__author}>{articleUsername}</span>
         <span className={classes.article__date}>{format(new Date(createdAt), 'MMMM, d yyyy')}</span>
         <img
           className={classes['article__author-img']}
           width="46"
           height="46"
           src={image || defaultImage}
-          alt={username}
+          alt={articleUsername}
         />
-        { userIsAuthorized && <ArticleUserControls slug={curArticle.slug} onDelete={() => {}} /> }
+        { userIsAuthorized && curUsename === articleUsername && <ArticleUserControls slug={curArticle.slug} onDelete={() => {}} /> }
       </div>
     </header>
     <p className={classes.article__description}>
@@ -83,6 +85,7 @@ const mapStateToProps = (state: StateType) => ({
   contentLoading: state.contentLoading,
   curArticle: state.curArticle,
   errorMsg: state.error,
+  user: state.user,
   userIsAuthorized: state.userIsAuthorized,
 });
 
