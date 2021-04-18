@@ -40,9 +40,10 @@ export default class ArticlesService {
     return this.apiRequest.getResource(path, {}, 'PUT', { article: postParams }, header);
   }
 
-  public deleteArticle(articleSlug: string): Promise<any> {
+  public deleteArticle(articleSlug: string, userToken?: string): Promise<any> {
+    const header = { 'Authorization': `Token ${userToken}` };
     const path = this.API_UPDATE_ARTICLE_PATH.replace('{slug}', articleSlug);
-    return this.apiRequest.getResource(path, {}, 'DELETE');
+    return this.apiRequest.getResource(path, {}, 'DELETE', null, header);
   }
 
   public favoriteArticle(articleSlug: string): Promise<ArticleType> {

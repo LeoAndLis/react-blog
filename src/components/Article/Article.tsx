@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { format } from 'date-fns';
 import { Alert, Spin } from 'antd';
 import ArticleUserControls from '../ArticleUserControls/ArticleUserControls';
-import { setArticle } from '../../store/actions/actions';
+import { deleteArticle, setArticle } from '../../store/actions/actions';
 import { ArticleType, StateType, UserType } from '../../lib/types';
 
 import defaultImage from '../../assets/images/smiley-cyrus.jpg';
@@ -18,14 +18,15 @@ type ArticleParamsType = {
   user: UserType;
   userIsAuthorized: boolean;
   getNewArticle: (value: string) => void;
+  deleteCurArticle: (slug: string) => void;
 };
 
-const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, user, userIsAuthorized }: ArticleParamsType) => {
+const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, user, userIsAuthorized, deleteCurArticle }: ArticleParamsType) => {
   const loadNewArticle = useCallback((value: string) => getNewArticle(value), [ getNewArticle ]);
   useEffect(() => loadNewArticle(slug),
     [ slug, loadNewArticle ]);
   const { title, description, body, tagList, createdAt, favoritesCount, author } = curArticle;
-  const { username: curUsename } = user;
+  const curUsername = user?.username || '';
   const { image, username: articleUsername } = author;
   let tags = null;
   if ( tagList !== undefined ) {
@@ -68,7 +69,7 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, us
           src={image || defaultImage}
           alt={articleUsername}
         />
-        { userIsAuthorized && curUsename === articleUsername && <ArticleUserControls slug={curArticle.slug} onDelete={() => {}} /> }
+        { userIsAuthorized && curUsername === articleUsername && <ArticleUserControls slug={curArticle.slug} onDelete={deleteCurArticle} /> }
       </div>
     </header>
     <p className={classes.article__description}>
@@ -89,6 +90,9 @@ const mapStateToProps = (state: StateType) => ({
   userIsAuthorized: state.userIsAuthorized,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({ getNewArticle: (slug: string) => dispatch(setArticle(slug)) });
+const mapDispatchToProps = (dispatch: any) => ({
+  getNewArticle: (slug: string) => dispatch(setArticle(slug)),
+  deleteCurArticle: (slug: string) => dispatch(deleteArticle(slug)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Article);

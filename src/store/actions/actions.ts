@@ -44,7 +44,6 @@ export const setArticle = (slug: string) => (dispatch: any) => {
 };
 
 export const setArticlesList = (page: number, pageSize: number | undefined) => (dispatch: any) => {
-  console.log('set articles list', page, pageSize);
   const offset: number = page * (pageSize || 20);
   dispatch(setContentLoadingAction(true));
   dispatch(setErrorAction(''));
@@ -78,6 +77,19 @@ export const createArticle = (article: AddArticleType) => (dispatch: any) => {
       dispatch(setErrorAction(error.message));
     })
     .finally(() => dispatch(setContentLoadingAction(false)));
+};
+
+export const deleteArticle = (slug: string) => (dispatch: any) => {
+  dispatch(setContentLoadingAction(true));
+  dispatch(setValidationErrorAction(null));
+  dispatch(setErrorAction(''));
+  articlesService
+    .deleteArticle(slug, store.getState().user?.token)
+    .then((result) => console.log(result))
+    .catch((error) => {
+      dispatch(setErrorAction(error.message));
+    })
+    .finally(dispatch(setContentLoadingAction(false)));
 };
 
 export const updateArticle = (article: AddArticleType, slug?: string) => (dispatch: any) => {
