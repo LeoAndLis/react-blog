@@ -26,7 +26,7 @@ const ArticleEdit = ({ contentLoading, curArticle, error, slug, validationErrors
     <>
       {contentLoading && <Spin className={classes['loading-block']} size="large" />}
       {error && <Alert className={classes['error-block']} type="error" message="Error" closable description={error} />}
-      <ArticleForm article={curArticle || null} formTitle="Edit article" onSubmit={updateCurArticle} validationErrors={validationErrors} />
+      <ArticleForm article={curArticle || null} formTitle="Edit article" onSubmit={(article: AddArticleType) => updateCurArticle(article, slug)} validationErrors={validationErrors} />
     </>
   );
 };

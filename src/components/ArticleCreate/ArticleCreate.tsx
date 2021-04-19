@@ -13,7 +13,7 @@ type ArticleCreateProps = {
   error: string;
   validationErrors: any;
   userIsAuthorized: boolean;
-  onSubmit: (article: AddArticleType) => void;
+  onSubmit: (article: AddArticleType, history: any) => void;
 };
 
 const ArticleCreate = ({ contentLoading, error, validationErrors, userIsAuthorized, onSubmit }: ArticleCreateProps) => {
@@ -25,7 +25,7 @@ const ArticleCreate = ({ contentLoading, error, validationErrors, userIsAuthoriz
   <>
     {contentLoading && <Spin className={classes['loading-block']} size="large" />}
     {error && <Alert className={classes['error-block']} type="error" message="Error" closable description={error} />}
-    <ArticleForm article={null} formTitle="Create new article" onSubmit={onSubmit} validationErrors={validationErrors} />
+    <ArticleForm article={null} formTitle="Create new article" onSubmit={(article: AddArticleType) => onSubmit(article, history)} validationErrors={validationErrors} />
   </>
   );
 };
@@ -37,6 +37,6 @@ const mapStateToProps = (state: StateType) => ({
   userIsAuthorized: state.userIsAuthorized,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({ onSubmit: (article: AddArticleType) => dispatch(createArticle(article)) });
+const mapDispatchToProps = (dispatch: any) => ({ onSubmit: (article: AddArticleType, history: any) => dispatch(createArticle(article, history)) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleCreate);

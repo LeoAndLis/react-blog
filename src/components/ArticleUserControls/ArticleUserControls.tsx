@@ -7,14 +7,14 @@ import classes from './ArticleUserControls.module.scss';
 
 type ArticleUserControlsPropsType = {
   slug: string;
-  onDelete: (slug: string) => void;
+  onDelete: () => void;
 };
 
 const ArticleUserControls = ({ slug, onDelete }: ArticleUserControlsPropsType) => (
   <div className={classes.user_controls}>
     <Popconfirm
       cancelText="No"
-      onConfirm={() => onDelete(slug)}
+      onConfirm={onDelete}
       okText="Yes"
       placement="rightTop"
       title="Are you sure to delete this task?"

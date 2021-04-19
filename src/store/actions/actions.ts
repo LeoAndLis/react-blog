@@ -59,14 +59,14 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
 
-export const createArticle = (article: AddArticleType) => (dispatch: any) => {
+export const createArticle = (article: AddArticleType, history: any) => (dispatch: any) => {
   dispatch(setContentLoadingAction(true));
   dispatch(setValidationErrorAction(null));
   dispatch(setErrorAction(''));
   articlesService
     .addArticle(article, store.getState().user?.token)
     .then((result) => {
-      console.log(result);
+      history.push(`atricles/${result.article.slug}`);
     })
     .catch((error) => {
       if (error instanceof ValidationErrors) {
@@ -79,13 +79,13 @@ export const createArticle = (article: AddArticleType) => (dispatch: any) => {
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
 
-export const deleteArticle = (slug: string) => (dispatch: any) => {
+export const deleteArticle = (slug: string, history: any) => (dispatch: any) => {
   dispatch(setContentLoadingAction(true));
   dispatch(setValidationErrorAction(null));
   dispatch(setErrorAction(''));
   articlesService
     .deleteArticle(slug, store.getState().user?.token)
-    .then((result) => console.log(result))
+    .then(() => history.push('/'))
     .catch((error) => {
       dispatch(setErrorAction(error.message));
     })
