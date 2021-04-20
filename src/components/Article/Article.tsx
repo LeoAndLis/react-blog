@@ -6,7 +6,7 @@ import { Alert, Spin } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import { useHistory } from 'react-router-dom';
 import ArticleUserControls from '../ArticleUserControls/ArticleUserControls';
-import { deleteArticle, setArticle } from '../../store/actions/actions';
+import { deleteArticle, needRedirectAction, setArticle } from '../../store/actions/actions';
 import { ArticleType, StateType, UserType } from '../../lib/types';
 
 import defaultImage from '../../assets/images/smiley-cyrus.jpg';
@@ -16,18 +16,24 @@ type ArticleParamsType = {
   contentLoading: boolean;
   curArticle: ArticleType;
   errorMsg: string;
+  needRedirect: boolean;
   slug: string;
   user: UserType;
   userIsAuthorized: boolean;
   getNewArticle: (value: string) => void;
-  deleteCurArticle: (slug: string, history: object) => void;
+  deleteCurArticle: (slug: string) => void;
+  setNeedRedirect: (value: boolean) => void;
 };
 
-const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, user, userIsAuthorized, deleteCurArticle }: ArticleParamsType) => {
+const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, needRedirect, slug, user, userIsAuthorized, deleteCurArticle, setNeedRedirect }: ArticleParamsType) => {
   const loadNewArticle = useCallback((value: string) => getNewArticle(value), [ getNewArticle ]);
   useEffect(() => loadNewArticle(slug),
     [ slug, loadNewArticle ]);
   const history = useHistory();
+  if ( needRedirect ) {
+    setNeedRedirect(false);
+    history.push('/');
+  }
   const { title, description, body, tagList, createdAt, favoritesCount, author } = curArticle;
   const curUsername = user?.username || '';
   const { image, username: articleUsername } = author;
@@ -72,7 +78,7 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, slug, us
           src={image || defaultImage}
           alt={articleUsername}
         />
-        { userIsAuthorized && curUsername === articleUsername && <ArticleUserControls slug={curArticle.slug} onDelete={() => deleteCurArticle(slug, history)} /> }
+        { userIsAuthorized && curUsername === articleUsername && <ArticleUserControls slug={curArticle.slug} onDelete={() => deleteCurArticle(slug)} /> }
       </div>
     </header>
     <p className={classes.article__description}>
@@ -89,13 +95,15 @@ const mapStateToProps = (state: StateType) => ({
   contentLoading: state.contentLoading,
   curArticle: state.curArticle,
   errorMsg: state.error,
+  needRedirect: state.needRedirect,
   user: state.user,
   userIsAuthorized: state.userIsAuthorized,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
   getNewArticle: (slug: string) => dispatch(setArticle(slug)),
-  deleteCurArticle: (slug: string, history: object) => dispatch(deleteArticle(slug, history)),
+  deleteCurArticle: (slug: string) => dispatch(deleteArticle(slug)),
+  setNeedRedirect: (value: boolean) => dispatch(needRedirectAction(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Article);

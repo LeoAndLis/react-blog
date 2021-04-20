@@ -62,6 +62,7 @@ export type StateType = {
   contentLoading: boolean;
   curArticle: ArticleType;
   error: string;
+  needRedirect: boolean;
   validationErrors: ValidationErrorsType;
   user: UserType;
   userIsAuthorized: boolean;

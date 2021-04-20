@@ -1,4 +1,5 @@
 import {
+  NEED_REDIRECT,
   SET_ARTICLE,
   SET_ARTICLES_LIST,
   SET_ARTICLES_COUNT,
@@ -16,6 +17,7 @@ import { getUserToken, setUserToken } from '../../lib/storage';
 import { AddArticleType, ArticleType, ValidationErrorsType, UserType, UserEditType } from '../../lib/types';
 import ValidationErrors from '../../services/ValidationErrors';
 
+export const needRedirectAction = (payload: boolean) => ({ type: NEED_REDIRECT, payload });
 const setArticleAction = (payload: ArticleType) => ({ type: SET_ARTICLE, payload });
 const setArticlesListAction = (payload: ArticleType[]) => ({ type: SET_ARTICLES_LIST, payload });
 const setArticlesCountAction = (payload: number) => ({ type: SET_ARTICLES_COUNT, payload });
@@ -59,33 +61,28 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
 
-export const createArticle = (article: AddArticleType, history: any) => (dispatch: any) => {
+export const createArticle = (article: AddArticleType) => (dispatch: any) => {
   dispatch(setContentLoadingAction(true));
   dispatch(setValidationErrorAction(null));
   dispatch(setErrorAction(''));
   articlesService
     .addArticle(article, store.getState().user?.token)
-    .then((result) => {
-      history.push(`atricles/${result.article.slug}`);
-    })
+    .then(() => dispatch(needRedirectAction(true)))
     .catch((error) => {
       if (error instanceof ValidationErrors) {
-        console.log(error.errors);
         dispatch(setValidationErrorAction(error.errors));
       }
-      console.log(error);
       dispatch(setErrorAction(error.message));
     })
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
 
-export const deleteArticle = (slug: string, history: any) => (dispatch: any) => {
+export const deleteArticle = (slug: string) => (dispatch: any) => {
   dispatch(setContentLoadingAction(true));
-  dispatch(setValidationErrorAction(null));
   dispatch(setErrorAction(''));
   articlesService
     .deleteArticle(slug, store.getState().user?.token)
-    .then(() => history.push('/'))
+    .then(() => dispatch(needRedirectAction(true)))
     .catch((error) => {
       dispatch(setErrorAction(error.message));
     })
@@ -99,15 +96,11 @@ export const updateArticle = (article: AddArticleType, slug?: string) => (dispat
   const curSlug = slug || '';
   articlesService
     .updateArticle(curSlug, article, store.getState().user?.token)
-    .then((result) => {
-      console.log(result);
-    })
+    .then(() => {})
     .catch((error) => {
       if (error instanceof ValidationErrors) {
-        console.log(error.errors);
         dispatch(setValidationErrorAction(error.errors));
       }
-      console.log(error);
       dispatch(setErrorAction(error.message));
     })
     .finally(() => dispatch(setContentLoadingAction(false)));

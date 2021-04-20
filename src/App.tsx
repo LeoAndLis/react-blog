@@ -34,7 +34,6 @@ function App({ setCurrentUser }: AppPropsType) {
               exact
               path="/articles/:slug/edit"
               render={({ match }: any) => {
-                console.log('route render article edit');
                 const { slug } = match.params;
                 return <ArticleEdit slug={slug} />;
               }}
@@ -43,7 +42,6 @@ function App({ setCurrentUser }: AppPropsType) {
               exact
               path="/articles/:slug"
               render={({ match }: any) => {
-                console.log('route render article');
                 const { slug } = match.params;
                 return <Article slug={slug} />;
               }}

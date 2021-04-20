@@ -18,7 +18,6 @@ type ArticleEditProps = {
 };
 
 const ArticleEdit = ({ contentLoading, curArticle, error, slug, validationErrors, getCurArticle, updateCurArticle }: ArticleEditProps) => {
-  console.log('article edit', slug);
   const loadCurArticle = useCallback((value: string) => getCurArticle(value), [ getCurArticle ]);
   useEffect(() => loadCurArticle(slug),
     [ slug, loadCurArticle ]);

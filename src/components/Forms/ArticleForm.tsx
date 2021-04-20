@@ -54,19 +54,16 @@ const ArticleForm = ({ article, formTitle, validationErrors, onSubmit }: Article
     return newTags;
   });
   const onSubmitArticle = (data: ArticleFormType) => {
-    console.log(data);
     for (const entry of tags) {
-      console.log(entry);
       if (entry[1] === '') {
         tags.delete(entry[0]);
       }
     }
     let curTags: string[] = [];
     if ( tags.size ) {
-      curTags = [...new Set(tags.values())];
+      curTags = [...Array.from(new Set(tags.values())).reverse()];
     }
     const curData = { ...data, tagList: curTags };
-    console.log(curData);
     onSubmit(curData);
   };
   const validationRules = {
