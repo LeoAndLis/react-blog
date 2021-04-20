@@ -25,8 +25,13 @@ export default class ArticlesService {
     return this.apiRequest.getResource(path);
   }
 
-  public getArticles(offset: number): Promise<{ articles: ArticleType[], articlesCount: number }> {
-    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, { offset });
+  public getArticles(offset: number, userToken?: string): Promise<{ articles: ArticleType[], articlesCount: number }> {
+    let header = {};
+    if (userToken) {
+      header = { 'Authorization': `Token ${userToken}` };
+    }
+    console.log(header);
+    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, { offset }, 'GET', header);
   }
 
   public getFeedArticles(): Promise<ArticleType[]> {
@@ -46,9 +51,16 @@ export default class ArticlesService {
     return this.apiRequest.getResource(path, {}, 'DELETE', null, header);
   }
 
-  public favoriteArticle(articleSlug: string): Promise<ArticleType> {
+  public favoriteArticle(articleSlug: string, userToken?: string): Promise<ArticleType> {
+    const header = { 'Authorization': `Token ${userToken}` };
     const path = this.API_ARTICLE_FAVORITE_PATH.replace('{slug}', articleSlug);
-    return this.apiRequest.getResource(path, {}, 'POST');
+    return this.apiRequest.getResource(path, {}, 'POST', null, header);
+  }
+
+  public unFavoriteArticle(articleSlug: string, userToken?: string): Promise<ArticleType> {
+    const header = { 'Authorization': `Token ${userToken}` };
+    const path = this.API_ARTICLE_FAVORITE_PATH.replace('{slug}', articleSlug);
+    return this.apiRequest.getResource(path, {}, 'DELETE', null, header);
   }
 
   public unfavoriteArticle(articleSlug: string): Promise<ArticleType> {

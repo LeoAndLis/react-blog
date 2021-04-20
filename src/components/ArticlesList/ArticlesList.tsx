@@ -27,8 +27,11 @@ const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, s
     setNewArticles(newPage, pageSize);
   };
   const articles = <ul className={classes['articles-list']}>
-    {articlesList.map((article) => <li key={article.slug} className="articles-list__item"><ArticlesListItem
-      article={article} /></li>)}
+    {articlesList.map((article) => (
+      <li key={article.slug} className="articles-list__item">
+        <ArticlesListItem article={article} deleteCurArticle={() => {}}/>
+      </li>))
+    }
   </ul>;
   const error = errorMsg.length ? <Alert className={classes['articles-error']} type="error" message="Error" description={errorMsg} /> : null;
   const spinner = contentLoading ? <Spin size="large" className={classes['articles-loading']} /> : null;

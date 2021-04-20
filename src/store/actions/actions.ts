@@ -9,6 +9,7 @@ import {
   SET_USER_AUTHORIZED,
   SET_USER_LOADING,
   SET_USER,
+  UPDATE_ARTICLE_FAVORITE,
 } from '../types/types';
 import store from '../store';
 import ArticlesService from '../../services/ArticlesService';
@@ -27,6 +28,7 @@ export const setValidationErrorAction = (payload: ValidationErrorsType) => ({ ty
 export const setUserAuthorizedAction = (payload: boolean) => ({ type: SET_USER_AUTHORIZED, payload });
 const setUserLoadingAction = (payload: boolean) => ({ type: SET_USER_LOADING, payload });
 export const setUserAction = (payload: UserType | null) => ({ type: SET_USER, payload });
+const updateArticleFavoriteAction = (payload: string) => ({ type: UPDATE_ARTICLE_FAVORITE, payload });
 
 const articlesService = new ArticlesService();
 const userService = new UserService();
@@ -50,15 +52,31 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
   dispatch(setContentLoadingAction(true));
   dispatch(setErrorAction(''));
   articlesService
-    .getArticles(offset)
+    .getArticles(offset, store.getState().user?.token)
     .then((result) => {
       dispatch(setArticlesListAction(result.articles));
       dispatch(setArticlesCountAction(result.articlesCount));
     })
-    .catch((error) => {
-      dispatch(setErrorAction(error.message));
-    })
+    .catch((error) => dispatch(setErrorAction(error.message)))
     .finally(() => dispatch(setContentLoadingAction(false)));
+};
+
+export const fetchArticleFavorite = (slug: string, favorite: boolean) => (dispatch: any) => {
+  const token = store.getState().user?.token || '';
+  dispatch(setErrorAction(''));
+  if (favorite) {
+    articlesService
+      .unFavoriteArticle(slug, token)
+      .then(dispatch(updateArticleFavoriteAction(slug)))
+      .catch((error) => dispatch(setErrorAction(error.message)))
+      .finally(() => dispatch(setContentLoadingAction(false)));
+  } else {
+    articlesService
+      .favoriteArticle(slug, token)
+      .then(dispatch(updateArticleFavoriteAction(slug)))
+      .catch((error) => dispatch(setErrorAction(error.message)))
+      .finally();
+  }
 };
 
 export const createArticle = (article: AddArticleType) => (dispatch: any) => {
