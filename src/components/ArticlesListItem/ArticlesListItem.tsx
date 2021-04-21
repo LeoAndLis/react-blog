@@ -1,17 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
 import classNames from 'classnames';
 import { ArticleType } from '../../lib/types';
 import ArticleUserControls from '../ArticleUserControls/ArticleUserControls';
-import { fetchArticleFavorite } from '../../store/actions/actions';
 
 import defaultImage from '../../assets/images/smiley-cyrus.jpg';
 import classes from '../Article/Article.module.scss';
 
 type ArticlesListItemPropsType = {
+  activeFavButton: boolean;
   article: ArticleType;
   showBody?: boolean;
   showControls?: boolean;
@@ -19,23 +18,30 @@ type ArticlesListItemPropsType = {
   setFavorite: (slug: string, favorite: boolean) => void;
 };
 
-const ArticlesListItem = ({ article, showBody, showControls, deleteCurArticle, setFavorite }: ArticlesListItemPropsType) => {
+const ArticlesListItem = ({ activeFavButton, article, showBody, showControls, deleteCurArticle, setFavorite }: ArticlesListItemPropsType) => {
   const { slug, title, favorited, description, tagList, createdAt, favoritesCount, author, body } = article;
   const { username, image } = author;
   const tags = tagList.map((tag) => <li key={tag} className={classes['article-tags__item']}>{tag}</li>);
-  console.log(article);
   const articleBody = (
     <div className={classes.article__text}>
       <ReactMarkdown>{body}</ReactMarkdown>
     </div>
   );
+  const favButton = activeFavButton
+    && <button
+      className={classNames(classes['article__favorite-button'], { [classes['article__favorite-button--favorited']]: favorited })}
+      type="button"
+      onClick={() => setFavorite(slug, favorited)}
+      > </button>;
+  const favIcon = !activeFavButton && <span className={classNames(classes['article__favorite-button'])}/>;
   return (
     <article className={classes.article}>
       <header className={classes.article__header}>
         <div className={classes['article__info-block']}>
           <div className={classes['article__title-block']}>
             <Link to={`/articles/${slug}`}><h2 className={classes.article__title}>{title}</h2></Link>
-            <button className={classNames(classes['article__favorite-button'], { [classes['article__favorite-button']]: favorited })} type="button" onClick={() => setFavorite(slug, favorited)}> </button>
+            {favButton}
+            {favIcon}
             <span className={classes['article__favorite-count']}>{favoritesCount}</span>
           </div>
           <ul className={classNames(classes.article__tags, classes['article-tags'])}>
@@ -68,6 +74,4 @@ ArticlesListItem.defaultProps = {
   deleteCurArticle: undefined,
 };
 
-const mapDispatchToProps = (dispatch: any) => ({ setFavorite: (slug: string, favorite: boolean) => dispatch(fetchArticleFavorite(slug, favorite)) });
-
-export default connect(null, mapDispatchToProps)(ArticlesListItem);
+export default ArticlesListItem;

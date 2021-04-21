@@ -20,9 +20,13 @@ export default class ArticlesService {
     return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, {}, 'POST', { article: postParams }, header);
   }
 
-  public getArticle(articleSlug: string): Promise<{ article: ArticleType }> {
+  public getArticle(articleSlug: string, userToken?: string): Promise<{ article: ArticleType }> {
+    let header = {};
+    if (userToken) {
+      header = { 'Authorization': `Token ${userToken}` };
+    }
     const path = this.API_ARTICLE_PATH.replace('{slug}', articleSlug);
-    return this.apiRequest.getResource(path);
+    return this.apiRequest.getResource(path, {}, 'GET', null, header);
   }
 
   public getArticles(offset: number, userToken?: string): Promise<{ articles: ArticleType[], articlesCount: number }> {
@@ -30,8 +34,7 @@ export default class ArticlesService {
     if (userToken) {
       header = { 'Authorization': `Token ${userToken}` };
     }
-    console.log(header);
-    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, { offset }, 'GET', header);
+    return this.apiRequest.getResource(this.API_ARTICLES_LIST_PATH, { offset }, 'GET', null, header);
   }
 
   public getFeedArticles(): Promise<ArticleType[]> {

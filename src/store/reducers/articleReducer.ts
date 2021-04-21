@@ -1,4 +1,4 @@
-import { SET_ARTICLE } from '../types/types';
+import { SET_ARTICLE, UPDATE_CUR_ARTICLE_FAVORITE } from '../types/types';
 import { ArticleType } from '../../lib/types';
 
 type ReducerActionType = {
@@ -28,6 +28,13 @@ const articleReducer = (state: ArticleType = defaultState, { type, payload }: Re
   switch (type) {
     case SET_ARTICLE:
       return payload;
+    case UPDATE_CUR_ARTICLE_FAVORITE:{
+      const updArticle = { ...state };
+      updArticle.favorited = !state.favorited;
+      const inc = updArticle.favorited ? 1 : -1;
+      updArticle.favoritesCount += inc;
+      return updArticle;
+    }
     default:
       return state;
   }

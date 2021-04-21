@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Pagination, Spin } from 'antd';
 import ArticlesListItem from '../ArticlesListItem/ArticlesListItem';
-import { setArticlesList } from '../../store/actions/actions';
+import { setArticlesList, fetchArticleFavorite } from '../../store/actions/actions';
 import { ArticleType, StateType } from '../../lib/types';
 
 import classes from './ArticlesList.module.scss';
@@ -12,10 +12,12 @@ type ArticlesListPropsType = {
   articlesList: ArticleType[];
   contentLoading: boolean;
   errorMsg: string;
+  userIsAuthorized: boolean;
+  setFavorite: (slug: string, favorite: boolean) => void;
   setNewArticles: (page: number, pageSize: number | undefined) => {};
 };
 
-const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, setNewArticles }: ArticlesListPropsType) => {
+const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, userIsAuthorized, setFavorite, setNewArticles }: ArticlesListPropsType) => {
   const [page, setPage] = useState(1);
   useEffect(() => {
     setNewArticles(1, 20);
@@ -29,7 +31,7 @@ const ArticlesList = ({ articlesCount, articlesList, contentLoading, errorMsg, s
   const articles = <ul className={classes['articles-list']}>
     {articlesList.map((article) => (
       <li key={article.slug} className="articles-list__item">
-        <ArticlesListItem article={article} deleteCurArticle={() => {}}/>
+        <ArticlesListItem article={article} deleteCurArticle={() => {}} setFavorite={setFavorite} activeFavButton={userIsAuthorized} />
       </li>))
     }
   </ul>;
@@ -59,8 +61,12 @@ const mapStateToProps = (state: StateType) => ({
   articlesList: state.articlesList,
   contentLoading: state.contentLoading,
   errorMsg: state.error,
+  userIsAuthorized: state.userIsAuthorized,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({ setNewArticles: (page: number, pageSize: number | undefined) => dispatch(setArticlesList(page, pageSize)) });
+const mapDispatchToProps = (dispatch: any) => ({
+  setNewArticles: (page: number, pageSize: number | undefined) => dispatch(setArticlesList(page, pageSize)),
+  setFavorite: (slug: string, favorite: boolean) => dispatch(fetchArticleFavorite(slug, favorite, 'listArticle')),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticlesList);

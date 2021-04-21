@@ -10,6 +10,7 @@ import {
   SET_USER_LOADING,
   SET_USER,
   UPDATE_ARTICLE_FAVORITE,
+  UPDATE_CUR_ARTICLE_FAVORITE,
 } from '../types/types';
 import store from '../store';
 import ArticlesService from '../../services/ArticlesService';
@@ -29,6 +30,7 @@ export const setUserAuthorizedAction = (payload: boolean) => ({ type: SET_USER_A
 const setUserLoadingAction = (payload: boolean) => ({ type: SET_USER_LOADING, payload });
 export const setUserAction = (payload: UserType | null) => ({ type: SET_USER, payload });
 const updateArticleFavoriteAction = (payload: string) => ({ type: UPDATE_ARTICLE_FAVORITE, payload });
+const updateCurArticleFavoriteAction = () => ({ type: UPDATE_CUR_ARTICLE_FAVORITE });
 
 const articlesService = new ArticlesService();
 const userService = new UserService();
@@ -36,8 +38,9 @@ const userService = new UserService();
 export const setArticle = (slug: string) => (dispatch: any) => {
   dispatch(setContentLoadingAction(true));
   dispatch(setErrorAction(''));
+  const userToken = store.getState().user?.token || getUserToken() || '';
   articlesService
-    .getArticle(slug)
+    .getArticle(slug, userToken)
     .then((result) => {
       dispatch(setArticleAction(result.article));
     })
@@ -51,8 +54,9 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
   const offset: number = page * (pageSize || 20);
   dispatch(setContentLoadingAction(true));
   dispatch(setErrorAction(''));
+  const userToken = store.getState().user?.token || getUserToken() || '';
   articlesService
-    .getArticles(offset, store.getState().user?.token)
+    .getArticles(offset, userToken)
     .then((result) => {
       dispatch(setArticlesListAction(result.articles));
       dispatch(setArticlesCountAction(result.articlesCount));
@@ -61,19 +65,32 @@ export const setArticlesList = (page: number, pageSize: number | undefined) => (
     .finally(() => dispatch(setContentLoadingAction(false)));
 };
 
-export const fetchArticleFavorite = (slug: string, favorite: boolean) => (dispatch: any) => {
+const switchArticleAction = (dispatch: any, slug: string, type: 'listArticle' | 'curArticle') => {
+  switch (type) {
+    case 'listArticle':
+      dispatch(updateArticleFavoriteAction(slug));
+      break;
+    case 'curArticle':
+      dispatch(updateCurArticleFavoriteAction());
+      break;
+    default:
+      break;
+  }
+};
+
+export const fetchArticleFavorite = (slug: string, favorite: boolean, type: 'listArticle' | 'curArticle') => (dispatch: any) => {
   const token = store.getState().user?.token || '';
   dispatch(setErrorAction(''));
   if (favorite) {
     articlesService
       .unFavoriteArticle(slug, token)
-      .then(dispatch(updateArticleFavoriteAction(slug)))
+      .then(() => switchArticleAction(dispatch, slug, type))
       .catch((error) => dispatch(setErrorAction(error.message)))
       .finally(() => dispatch(setContentLoadingAction(false)));
   } else {
     articlesService
       .favoriteArticle(slug, token)
-      .then(dispatch(updateArticleFavoriteAction(slug)))
+      .then(() => switchArticleAction(dispatch, slug, type))
       .catch((error) => dispatch(setErrorAction(error.message)))
       .finally();
   }

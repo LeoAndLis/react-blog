@@ -3,7 +3,7 @@ import { ArticleType } from '../../lib/types';
 
 type ReducerActionType = {
   type: string;
-  payload: ArticleType[] | string;
+  payload?: ArticleType[] | string;
 };
 
 const articlesListReducer = (state: ArticleType[] = [], { type, payload }: ReducerActionType) => {
@@ -13,8 +13,10 @@ const articlesListReducer = (state: ArticleType[] = [], { type, payload }: Reduc
     case UPDATE_ARTICLE_FAVORITE:
       return state.map((item: ArticleType) => {
         if ( item.slug === payload ) {
-          const newItem = item;
-          newItem.favorited = !!item.favorited;
+          const newItem = { ...item };
+          newItem.favorited = !item.favorited;
+          const inc = newItem.favorited ? 1 : -1;
+          newItem.favoritesCount = item.favoritesCount + inc;
           return newItem;
         }
         return item;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, Spin } from 'antd';
 import { useHistory } from 'react-router-dom';
 import ArticlesListItem from '../ArticlesListItem/ArticlesListItem';
-import { deleteArticle, needRedirectAction, setArticle } from '../../store/actions/actions';
+import { deleteArticle, needRedirectAction, setArticle, fetchArticleFavorite } from '../../store/actions/actions';
 import { ArticleType, StateType, UserType } from '../../lib/types';
 
 import classes from './Article.module.scss';
@@ -19,9 +19,10 @@ type ArticleParamsType = {
   getNewArticle: (value: string) => void;
   deleteCurArticle: (slug: string) => void;
   setNeedRedirect: (value: boolean) => void;
+  setFavorite: (slug: string, favorite: boolean) => void;
 };
 
-const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, needRedirect, slug, user, userIsAuthorized, deleteCurArticle, setNeedRedirect }: ArticleParamsType) => {
+const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, needRedirect, slug, user, userIsAuthorized, deleteCurArticle, setNeedRedirect, setFavorite }: ArticleParamsType) => {
   const loadNewArticle = useCallback((value: string) => getNewArticle(value), [ getNewArticle ]);
   useEffect(() => loadNewArticle(slug),
     [ slug, loadNewArticle ]);
@@ -39,7 +40,14 @@ const Article = ({ contentLoading, curArticle, getNewArticle, errorMsg, needRedi
   if ( contentLoading ) {
     return <Spin  size="large" className={classes['article-loading']} />;
   }
-  return <ArticlesListItem article={curArticle} showBody showControls={userIsAuthorized && curUsername === articleUsername} deleteCurArticle={deleteCurArticle}/>;
+  return <ArticlesListItem
+    article={curArticle}
+    showBody
+    showControls={userIsAuthorized && curUsername === articleUsername}
+    deleteCurArticle={deleteCurArticle}
+    setFavorite={setFavorite}
+    activeFavButton={userIsAuthorized}
+  />;
 };
 
 const mapStateToProps = (state: StateType) => ({
@@ -55,6 +63,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   getNewArticle: (slug: string) => dispatch(setArticle(slug)),
   deleteCurArticle: (slug: string) => dispatch(deleteArticle(slug)),
   setNeedRedirect: (value: boolean) => dispatch(needRedirectAction(value)),
+  setFavorite: (slug: string, favorite: boolean) => dispatch(fetchArticleFavorite(slug, favorite, 'curArticle')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Article);
